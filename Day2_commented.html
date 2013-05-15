@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Day 2 - Commented History from Class</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Day 2 - Commented History from Class"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-05-14 18:55:18 "/>
+<meta name="generated" content="2013-05-14 22:51:35 EDT"/>
 <meta name="author" content="Cari Bogulski, Jason Gullifer"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,10 +34,23 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
   .org-info-js_info-navigation { border-style:none; }
@@ -66,36 +82,40 @@ lang="en" xml:lang="en">
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
+
+<div id="preamble">
+
+</div>
+
 <div id="content">
-
 <h1 class="title">Day 2 - Commented History from Class</h1>
-
 
 
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Working with data.frame </a>
+<li><a href="#sec-1">1 Working with data.frame</a>
 <ul>
-<li><a href="#sec-1.1">1.1 Load our heights data and get the dimensions </a></li>
-<li><a href="#sec-1.2">1.2 Referencing a data.frame by row and column number </a></li>
-<li><a href="#sec-1.3">1.3 Referencing a data.frame by column name </a></li>
-<li><a href="#sec-1.4">1.4 Adding new columns to data.frame </a>
+<li><a href="#sec-1-1">1.1 Load our heights data and get the dimensions</a></li>
+<li><a href="#sec-1-2">1.2 Referencing a data.frame by row and column number</a></li>
+<li><a href="#sec-1-3">1.3 Referencing a data.frame by column name</a></li>
+<li><a href="#sec-1-4">1.4 Adding new columns to data.frame</a>
 <ul>
-<li><a href="#sec-1.4.1">1.4.1 cbind() adding </a></li>
-<li><a href="#sec-1.4.2">1.4.2 $ adding </a></li>
+<li><a href="#sec-1-4-1">1.4.1 cbind() adding</a></li>
+<li><a href="#sec-1-4-2">1.4.2 $ adding</a></li>
 </ul>
 </li>
-<li><a href="#sec-1.5">1.5 Summarizing elements of a data.frame data </a></li>
-<li><a href="#sec-1.6">1.6 Filtering or subsetting data.frame </a></li>
+<li><a href="#sec-1-5">1.5 Summarizing elements of a data.frame data</a></li>
+<li><a href="#sec-1-6">1.6 Filtering or subsetting data.frame</a></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Misc Stuff </a>
+<li><a href="#sec-2">2 Misc Stuff</a>
 <ul>
-<li><a href="#sec-2.1">2.1 NA Values </a></li>
+<li><a href="#sec-2-1">2.1 NA Values</a></li>
 </ul>
 </li>
 </ul>
@@ -103,25 +123,25 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Working with data.frame </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Working with data.frame</h2>
 <div class="outline-text-2" id="text-1">
 
 
 </div>
 
-<div id="outline-container-1.1" class="outline-3">
-<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Load our heights data and get the dimensions </h3>
-<div class="outline-text-3" id="text-1.1">
+<div id="outline-container-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Load our heights data and get the dimensions</h3>
+<div class="outline-text-3" id="text-1-1">
 
-<p>Let's load our heights data using <code>read.csv</code>. Then we should check the
-dimensions of it, and check each of the columns to see what type of
-data they contain. We might also want to see the <code>head</code> of our data;
-by default it shows 6 rows but we can customize how many rows we want
-to see.
+<p>   Let's load our heights data using <code>read.csv</code>. Then we should check the
+   dimensions of it, and check each of the columns to see what type of
+   data they contain. We might also want to see the <code>head</code> of our data;
+   by default it shows 6 rows but we can customize how many rows we want
+   to see.
 </p>
 
 
-<pre class="example">heights = read.csv("height_data.csv")
+<pre class="src src-R">heights = read.csv(<span style="color: #8b2252;">"Cooked Data Sets/height_data.csv"</span>)
 dim(heights)
 str(heights)
 head(heights)
@@ -130,18 +150,37 @@ head(heights,2)
 
 
 
+   
+
+<pre class="example">[1] 10  3
+'data.frame':        10 obs. of  3 variables:
+ $ Name  : Factor w/ 10 levels "Alvaro","Amelia",..: 5 7 10 4 6 3 2 1 9 8
+ $ Height: int  65 67 66 62 66 69 69 71 64 74
+ $ Gender: Factor w/ 2 levels "F","M": 1 2 2 1 1 2 1 2 1 2
+     Name Height Gender
+1    Cari     65      F
+2   Jason     67      M
+3     Tim     66      M
+4 Caitlin     62      F
+5 Fatemeh     66      F
+6   Bobby     69      M
+   Name Height Gender
+1  Cari     65      F
+2 Jason     67      M
+</pre>
+
 
 
 
 
 
 <p>
-Note: <code>dim()</code> only really works on multi-dimensional objects like
-data.frames. Otherwise NULL is returned.
+   Note: <code>dim()</code> only really works on multi-dimensional objects like
+   data.frames. Otherwise NULL is returned.
 </p>
 
 
-<pre class="example">x = 7
+<pre class="src src-R">x = 7
 dim(x)
 y = 5
 xy = c(x,y)
@@ -149,6 +188,10 @@ dim(xy)
 </pre>
 
 
+<pre class="example">
+NULL
+NULL
+</pre>
 
 
 
@@ -157,48 +200,89 @@ dim(xy)
 
 </div>
 
-<div id="outline-container-1.2" class="outline-3">
-<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Referencing a data.frame by row and column number </h3>
-<div class="outline-text-3" id="text-1.2">
+<div id="outline-container-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Referencing a data.frame by row and column number</h3>
+<div class="outline-text-3" id="text-1-2">
 
 
 
 
 
-<pre class="example">heights[1,3]
+<pre class="src src-R">heights[1,3]
 heights[7,1]
 heights[4,2]
+</pre>
+
+
+<pre class="example">
+[1] F
+Levels: F M
+[1] Amelia
+Levels: Alvaro Amelia Bobby Caitlin Cari Fatemeh Jason Nathan Peiyao Tim
+[1] 62
 </pre>
 
 
 
 
 
-<pre class="example">heights[1:10,2]
+<pre class="src src-R">heights[1:10,2]
 heights[1:10,1:3]
 heights[1:10,c(1,3)]
 </pre>
 
 
 
+<pre class="example"> [1] 65 67 66 62 66 69 69 71 64 74
+      Name Height Gender
+1     Cari     65      F
+2    Jason     67      M
+3      Tim     66      M
+4  Caitlin     62      F
+5  Fatemeh     66      F
+6    Bobby     69      M
+7   Amelia     69      F
+8   Alvaro     71      M
+9   Peiyao     64      F
+10  Nathan     74      M
+      Name Gender
+1     Cari      F
+2    Jason      M
+3      Tim      M
+4  Caitlin      F
+5  Fatemeh      F
+6    Bobby      M
+7   Amelia      F
+8   Alvaro      M
+9   Peiyao      F
+10  Nathan      M
+</pre>
+
 
 </div>
 
 </div>
 
-<div id="outline-container-1.3" class="outline-3">
-<h3 id="sec-1.3"><span class="section-number-3">1.3</span> Referencing a data.frame by column name </h3>
-<div class="outline-text-3" id="text-1.3">
+<div id="outline-container-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> Referencing a data.frame by column name</h3>
+<div class="outline-text-3" id="text-1-3">
 
 
 
 
-<pre class="example">heights$Height
+<pre class="src src-R">heights$Height
 heights$Name
 heights$Gender
 </pre>
 
 
+<pre class="example">
+ [1] 65 67 66 62 66 69 69 71 64 74
+ [1] Cari    Jason   Tim     Caitlin Fatemeh Bobby   Amelia  Alvaro  Peiyao  Nathan 
+Levels: Alvaro Amelia Bobby Caitlin Cari Fatemeh Jason Nathan Peiyao Tim
+ [1] F M M F F M F M F M
+Levels: F M
+</pre>
 
 
 
@@ -209,11 +293,15 @@ its inclusion would cause an error.
 </p>
 
 
-<pre class="example">height$Heights[5]
-height$Heights[5,2]
+<pre class="src src-R">heights$Height[5]
+heights$Height[5,2]
 </pre>
 
 
+<pre class="example">
+[1] 66
+Error in heights$Height[5, 2] : incorrect number of dimensions
+</pre>
 
 
 <p>
@@ -221,33 +309,36 @@ We might want to check the length of a column vector as well
 </p>
 
 
-<pre class="example">length(heights$Height)
+<pre class="src src-R">length(heights$Height)
 </pre>
 
 
+<pre class="example">
+[1] 10
+</pre>
 
 
 </div>
 
 </div>
 
-<div id="outline-container-1.4" class="outline-3">
-<h3 id="sec-1.4"><span class="section-number-3">1.4</span> Adding new columns to data.frame </h3>
-<div class="outline-text-3" id="text-1.4">
+<div id="outline-container-1-4" class="outline-3">
+<h3 id="sec-1-4"><span class="section-number-3">1.4</span> Adding new columns to data.frame</h3>
+<div class="outline-text-3" id="text-1-4">
 
 <p>Two basic ways. Through <code>$</code> notation and through <code>cbind()</code> (or column bind).
 </p>
 
 </div>
 
-<div id="outline-container-1.4.1" class="outline-4">
-<h4 id="sec-1.4.1"><span class="section-number-4">1.4.1</span> cbind() adding </h4>
-<div class="outline-text-4" id="text-1.4.1">
+<div id="outline-container-1-4-1" class="outline-4">
+<h4 id="sec-1-4-1"><span class="section-number-4">1.4.1</span> cbind() adding</h4>
+<div class="outline-text-4" id="text-1-4-1">
 
 
 
 
-<pre class="example">pets_height = c(12,9,8,0,25,24,7,0,0,0)
+<pre class="src src-R">pets_height = c(12,9,8,0,25,24,7,0,0,0)
 new_data = cbind(heights,pets_height)
 new_data
 
@@ -258,46 +349,106 @@ new_data
 
 
 
+<pre class="example">      Name Height Gender pets_height
+1     Cari     65      F          12
+2    Jason     67      M           9
+3      Tim     66      M           8
+4  Caitlin     62      F           0
+5  Fatemeh     66      F          25
+6    Bobby     69      M          24
+7   Amelia     69      F           7
+8   Alvaro     71      M           0
+9   Peiyao     64      F           0
+10  Nathan     74      M           0
+      Name Height Gender pets_height
+1     Cari     65      F          12
+2    Jason     67      M           9
+3      Tim     66      M           8
+4  Caitlin     62      F           0
+5  Fatemeh     66      F          25
+6    Bobby     69      M          24
+7   Amelia     69      F           7
+8   Alvaro     71      M           0
+9   Peiyao     64      F           0
+10  Nathan     74      M           0
+</pre>
+
 
 </div>
 
 </div>
 
-<div id="outline-container-1.4.2" class="outline-4">
-<h4 id="sec-1.4.2"><span class="section-number-4">1.4.2</span> $ adding </h4>
-<div class="outline-text-4" id="text-1.4.2">
+<div id="outline-container-1-4-2" class="outline-4">
+<h4 id="sec-1-4-2"><span class="section-number-4">1.4.2</span> $ adding</h4>
+<div class="outline-text-4" id="text-1-4-2">
 
 
 
 
-<pre class="example">pets_height = c(12,9,8,0,25,24,7,0,0,0)
+<pre class="src src-R">pets_height = c(12,9,8,0,25,24,7,0,0,0)
+pets_height
 new_data = heights
-new_data$pets_height &lt;- pets_height
-new_new_data &lt;- new_data
-new_new_data$joint_height &lt;- new_new_data$Height + new_new_data$pets_height
+new_data$pets_height <span style="color: #008b8b;">&lt;-</span> pets_height
+new_data
+new_new_data <span style="color: #008b8b;">&lt;-</span> new_data
+new_new_data$joint_height <span style="color: #008b8b;">&lt;-</span> new_new_data$Height + new_new_data$pets_height
+new_new_data
 </pre>
 
 
 
-
-</div>
-</div>
-
-</div>
-
-<div id="outline-container-1.5" class="outline-3">
-<h3 id="sec-1.5"><span class="section-number-3">1.5</span> Summarizing elements of a data.frame data </h3>
-<div class="outline-text-3" id="text-1.5">
-
-
-
-
-<pre class="example">all_heights_mean &lt;- mean(heights$Height)
-allheights_median &lt;- median(heights$Height)
-sums_heights &lt;- sum(heights$Height)
+<pre class="example"> [1] 12  9  8  0 25 24  7  0  0  0
+      Name Height Gender pets_height
+1     Cari     65      F          12
+2    Jason     67      M           9
+3      Tim     66      M           8
+4  Caitlin     62      F           0
+5  Fatemeh     66      F          25
+6    Bobby     69      M          24
+7   Amelia     69      F           7
+8   Alvaro     71      M           0
+9   Peiyao     64      F           0
+10  Nathan     74      M           0
+      Name Height Gender pets_height joint_height
+1     Cari     65      F          12           77
+2    Jason     67      M           9           76
+3      Tim     66      M           8           74
+4  Caitlin     62      F           0           62
+5  Fatemeh     66      F          25           91
+6    Bobby     69      M          24           93
+7   Amelia     69      F           7           76
+8   Alvaro     71      M           0           71
+9   Peiyao     64      F           0           64
+10  Nathan     74      M           0           74
 </pre>
 
 
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1-5" class="outline-3">
+<h3 id="sec-1-5"><span class="section-number-3">1.5</span> Summarizing elements of a data.frame data</h3>
+<div class="outline-text-3" id="text-1-5">
+
+
+
+
+<pre class="src src-R">all_heights_mean <span style="color: #008b8b;">&lt;-</span> mean(heights$Height)
+all_heights_mean
+allheights_median <span style="color: #008b8b;">&lt;-</span> median(heights$Height)
+allheights_median
+sums_heights <span style="color: #008b8b;">&lt;-</span> sum(heights$Height)
+sums_heights
+</pre>
+
+
+<pre class="example">
+[1] 67
+[1] 66
+[1] 673
+</pre>
 
 
 
@@ -309,41 +460,64 @@ vectors.
 
 
 
-<pre class="example">mean(heights)
+<pre class="src src-R">mean(heights)
 </pre>
 
 
+<pre class="example">
+[1] NA
+Warning message:
+In mean.default(heights) : argument is not numeric or logical: returning NA
+</pre>
 
 
 </div>
 
 </div>
 
-<div id="outline-container-1.6" class="outline-3">
-<h3 id="sec-1.6"><span class="section-number-3">1.6</span> Filtering or subsetting data.frame </h3>
-<div class="outline-text-3" id="text-1.6">
+<div id="outline-container-1-6" class="outline-3">
+<h3 id="sec-1-6"><span class="section-number-3">1.6</span> Filtering or subsetting data.frame</h3>
+<div class="outline-text-3" id="text-1-6">
 
 
 
 
-<pre class="example">data = new_data[,1:4]
+<pre class="src src-R">data = new_data[,1:4]
 petowner_data = data[data$pets_height&gt;0]
 petowner_data = data[data$pets_height&gt;0,]
+petowner_data
+</pre>
 
+
+<pre class="example">
+Error in `[.data.frame`(data, data$pets_height &gt; 0) : 
+  undefined columns selected
+     Name Height Gender pets_height
+1    Cari     65      F          12
+2   Jason     67      M           9
+3     Tim     66      M           8
+5 Fatemeh     66      F          25
+6   Bobby     69      M          24
+7  Amelia     69      F           7
 </pre>
 
 
 
 
 
-<pre class="example">data$pets_height&gt;0
+<pre class="src src-R">data$pets_height&gt;0
+</pre>
+
+
+<pre class="example">
+ [1]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE
 </pre>
 
 
 
 
 
-<pre class="example">tall_petowner_data = data[data$pets_height &gt; 0 &amp; data$Height &gt; mean(data$Height) , ]
+<pre class="src src-R">tall_petowner_data = data[data$pets_height &gt; 0 &amp; data$Height &gt; mean(data$Height) , ]
 tall_petowner_data
 
 short_petowner_data = data[data$pets_height &gt; 0 &amp; data$Height &lt; mean(data$Height) , ]
@@ -358,16 +532,42 @@ nonpetowners
 
 
 
+<pre class="example">    Name Height Gender pets_height
+6  Bobby     69      M          24
+7 Amelia     69      F           7
+     Name Height Gender pets_height
+1    Cari     65      F          12
+2   Jason     67      M           9
+3     Tim     66      M           8
+5 Fatemeh     66      F          25
+    Name Height Gender pets_height
+6  Bobby     69      M          24
+7 Amelia     69      F           7
+      Name Height Gender pets_height
+4  Caitlin     62      F           0
+8   Alvaro     71      M           0
+9   Peiyao     64      F           0
+10  Nathan     74      M           0
+</pre>
+
 
 <p>
 Alternative way of making non-petowners data set.
 </p>
 
 
-<pre class="example">nonpetowners = data[!(data$pets_height&gt;0),]
+<pre class="src src-R">nonpetowners = data[!(data$pets_height&gt;0),]
+nonpetowners
 </pre>
 
 
+<pre class="example">
+      Name Height Gender pets_height
+4  Caitlin     62      F           0
+8   Alvaro     71      M           0
+9   Peiyao     64      F           0
+10  Nathan     74      M           0
+</pre>
 
 
 
@@ -377,15 +577,15 @@ Alternative way of making non-petowners data set.
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Misc Stuff </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Misc Stuff</h2>
 <div class="outline-text-2" id="text-2">
 
 
 </div>
 
-<div id="outline-container-2.1" class="outline-3">
-<h3 id="sec-2.1"><span class="section-number-3">2.1</span> NA Values </h3>
-<div class="outline-text-3" id="text-2.1">
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> NA Values</h3>
+<div class="outline-text-3" id="text-2-1">
 
 
 <p>
@@ -397,12 +597,18 @@ included NA values.
 </p>
 
 
-<pre class="example">pets_height = c(12,9,8,NA,25,24,7,NA,NA,NA)
+<pre class="src src-R">pets_height = c(12,9,8,<span style="color: #228b22;">NA</span>,25,24,7,<span style="color: #228b22;">NA</span>,<span style="color: #228b22;">NA</span>,<span style="color: #228b22;">NA</span>)
+pets_height
 mean(pets_height)
-mean(pets_height,na.rm=TRUE)
+mean(pets_height,na.rm=<span style="color: #228b22;">TRUE</span>)
 </pre>
 
 
+<pre class="example">
+ [1] 12  9  8 NA 25 24  7 NA NA NA
+[1] NA
+[1] 14
+</pre>
 
 
 <p>
@@ -410,22 +616,26 @@ You can check for NAs in your data with the <code>is.na()</code> function
 </p>
 
 
-<pre class="example">is.na(pets_height)
+<pre class="src src-R">is.na(pets_height)
 </pre>
 
 
+<pre class="example">
+ [1] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE
+</pre>
+
 
 </div>
 </div>
 </div>
-<div id="postamble">
-<p class="author"> Author: Cari Bogulski, Jason Gullifer
-<a href="mailto:cari.bogulski@gmail.com">&lt;cari.bogulski@gmail.com&gt;</a>
-<a href="mailto:jason.gullifer@gmail.com">&lt;jason.gullifer@gmail.com&gt;</a>
-</p>
-<p class="date"> Date: 2013-05-14 18:55:18 </p>
-<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
 </div>
+
+<div id="postamble">
+<p class="date">Date: 2013-05-14 22:51:35 EDT</p>
+<p class="author">Author: Cari Bogulski, Jason Gullifer</p>
+<p class="creator">Org version 7.8.11 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
 </div>
 </body>
 </html>
