@@ -1,0 +1,972 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Day 2 - Commented History from Class</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Day 2 - Commented History from Class"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-05-15 23:13:22 EDT"/>
+<meta name="author" content="Cari Bogulski, Jason Gullifer"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Day 2 - Commented History from Class</h1>
+
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 A bit more on working with a <code>data.frame</code></a></li>
+<li><a href="#sec-2">2 Working with Jason's English Monolingual Naming Data: <code>monodata</code></a>
+<ul>
+<li><a href="#sec-2-1">2.1 About the dataset</a></li>
+<li><a href="#sec-2-2">2.2 Preliminaries: Reading data and checking coherence of data</a></li>
+<li><a href="#sec-2-3">2.3 Removing practice trials</a></li>
+<li><a href="#sec-2-4">2.4 Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>)</a>
+<ul>
+<li><a href="#sec-2-4-1">2.4.1 Factoring <code>Subject</code></a></li>
+<li><a href="#sec-2-4-2">2.4.2 Fixing <code>Accuracy</code> and factoring it</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-5">2.5 Data aggregation: <code>tapply()</code></a></li>
+<li><a href="#sec-2-6">2.6 The final script for today</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> A bit more on working with a <code>data.frame</code></h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+Read in the Disney data, check the head to make sure it looks
+okay. You can also check the dimensions by storing it to a
+variable. Remember: RC Cola, you can check rows by referencing the
+first element of the dimension vector and columns by referencing the
+second element of the vector.
+</p>
+
+
+<pre class="src src-R">disney = read.csv(<span style="color: #8b2252;">"./Cooked Data Sets/Disney Vices Data.csv"</span>)
+head(disney)
+dimensions = dim(disney)
+
+dimensions[1]
+dimensions[2]
+</pre>
+
+
+<pre class="example">
+                             Movie Year Company Length_Minutes Tobacco_Seconds Alcohol_Seconds
+1 Snow White and the Seven Dwarves 1937  Disney             83               0               0
+2                        Pinocchio 1940  Disney             88             223              80
+3                         Fantasia 1940  Disney            120               0               0
+4                            Dumbo 1941  Disney             64             176              88
+5                            Bambi 1942  Disney             69               0               0
+6             The Three Caballeros 1944  Disney             71             548               8
+[1] 50
+[1] 6
+</pre>
+
+
+<p>
+Don't trust length for a <code>data.frame</code>.
+</p>
+
+
+<pre class="src src-R">length(disney)
+</pre>
+
+
+<pre class="example">
+[1] 6
+</pre>
+
+
+<p>
+You can use <code>nrow()</code> and <code>ncol()</code> to return the number of rows and
+columns if you don't want to use <code>dim()</code>
+</p>
+
+
+
+<pre class="src src-R">nrow(disney)
+ncol(disney)
+</pre>
+
+
+<pre class="example">
+[1] 50
+[1] 6
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Working with Jason's English Monolingual Naming Data: <code>monodata</code></h2>
+<div class="outline-text-2" id="text-2">
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> About the dataset</h3>
+<div class="outline-text-3" id="text-2-1">
+
+<p>In this dataset, 41 monolingual English speakers named 128 printed
+words aloud. The time to begin naming the word from the onset of the
+printed word was recorded in ms (<code>TargetWord.RT</code>). Half of the words
+were cognates between Spanish and English (e.g., bus is written the
+same, sounds similar, and means the same thing in Spanish and English)
+and the other half were noncognates (e.g., the Spanish mesa means
+table in English).
+</p>
+<p>
+Typically, bilinguals speakers of Spanish and English recognize and
+name cognate words faster than non-cognate controls; this facilitation
+does not happen for monolinguals who speak only one of the two
+languages. Theoretically, cognate facilitation bilinguals suggests
+that they activate both of their language representations in
+parallel.
+</p>
+<p>
+The purpose of this dataset was to show that a set of cognate and
+lexically matched non-cognate control words did not elicit any
+facilitation for monolingual speakers of English.
+</p>
+<p>
+To prepare this data for analysis, a few steps must be performed after
+the data is read into R and the data structure is checked.  A set of
+practice-filler trials must be removed. Undergraduate RAs coded the
+accuracy of the word naming and made a few mistakes; these must be
+fixed. At least for today, this will prepare the dataset for the
+calculation of mean RTs for cognates and non-cognates separately.
+</p>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Preliminaries: Reading data and checking coherence of data</h3>
+<div class="outline-text-3" id="text-2-2">
+
+
+<p>
+Read the data and check the head; if anything is off, you'll probably
+notice that things won't look like neat columns and instead will
+contain lots of delimiters (e.g., commas or tabs) strung together.
+</p>
+<p>
+This data looks good! We can also use head and check past the first 6 rows by specifying the number of rows (here: 20). 
+</p>
+
+
+<pre class="src src-R">monodata = read.csv(<span style="color: #8b2252;">"./Real Datasets/monolingual_naming.csv"</span>)
+head(monodata,20)
+dim(monodata)
+</pre>
+
+
+
+<pre class="example">           ExperimentName Subject Block    List Procedure.Block. Animacy First_Phoneme Frequency_1
+1  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+2  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+3  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+4  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+5  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+6  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+7  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+8  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+9  No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+10 No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+11 No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+12 No_Context_S_script_v4       1     1            PracBlockProc    none          none        none
+13 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             s           6
+14 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             a           7
+15 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             f         133
+16 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             p         216
+17 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             r           6
+18 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             p         382
+19 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             f         331
+20 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             z           1
+   Frequency_1_Origin Frequency_2 Frequency_2_Origin Language LDT_MeanRT Length LexChar
+1                none        none               none     none       none   none    none
+2                none        none               none     none       none   none    none
+3                none        none               none     none       none   none    none
+4                none        none               none     none       none   none    none
+5                none        none               none     none       none   none    none
+6                none        none               none     none       none   none    none
+7                none        none               none     none       none   none    none
+8                none        none               none     none       none   none    none
+9                none        none               none     none       none   none    none
+10               none        none               none     none       none   none    none
+11               none        none               none     none       none   none    none
+12               none        none               none     none       none   none    none
+13                 KF        5.86              SUBTL      Eng    645.355      4     ELP
+14                 KF        0.98              SUBTL      Eng    711.129      8     ELP
+15                 KF      419.29              SUBTL      Eng    592.806      6     ELP
+16                 KF      233.14              SUBTL      Eng     539.71      5     ELP
+17                 KF       32.61              SUBTL      Eng    521.971      3     ELP
+18                 KF      140.67              SUBTL      Eng    709.667      9     ELP
+19                 KF      354.25              SUBTL      Eng    622.029      6     ELP
+20                 KF        2.82              SUBTL      Eng    716.515      6     ELP
+   MatchedEnglish MatchedSpanish Naming_MeanRT Nphon Nsyll OrthographicSimilarity Trial
+1            none           none          none  none  none                   none    NA
+2            none           none          none  none  none                   none    NA
+3            none           none          none  none  none                   none    NA
+4            none           none          none  none  none                   none    NA
+5            none           none          none  none  none                   none    NA
+6            none           none          none  none  none                   none    NA
+7            none           none          none  none  none                   none    NA
+8            none           none          none  none  none                   none    NA
+9            none           none          none  none  none                   none    NA
+10           none           none          none  none  none                   none    NA
+11           none           none          none  none  none                   none    NA
+12           none           none          none  none  none                   none    NA
+13           wall           muro       597.679     4     2            0.661538462     1
+14          puppy       cachorro       670.926     6     3             0.86746988     2
+15      president     presidente       599.667     5     1            0.058867362     3
+16       decision       decisión       558.036     5     2            0.078030303     4
+17       traveler        viajero       588.667     3     1            0.819260204     5
+18         friend          amiga       662.214     8     3             0.79543673     6
+19           boys          niños       608.393     6     3            0.731435777     7
+20         violin         violín       629.643     4     2            0.061941964     8
+   CognateStatus TargetWord TargetWord.RT Accuracy
+1           none        car             1        0
+2           none        man           715        1
+3           none      brief           683        1
+4           none       book           749        1
+5           none      coins           600        1
+6           none      movie           783        1
+7           none  chocolate           699        1
+8           none      lamps           663        1
+9           none restaurant           665        1
+10          none      roses           725        1
+11          none    bicycle           586        1
+12          none      lemon           593        1
+13           Cog       sofa           360        1
+14           Cog   antelope           540        0
+15          Ncog     friend           564        1
+16          Ncog      party           554        1
+17           Cog        rat           527        1
+18           Cog  president           535        1
+19           Cog     family           536        1
+20          Ncog     zipper           536        1
+[1] 5740   26
+</pre>
+
+
+<p>
+We could also use the structure <code>str()</code> function to check all of our
+data types. We want to make sure that the numerics are numeric, the
+factors are factors, etc.
+</p>
+
+
+
+<pre class="src src-R">str(monodata)
+</pre>
+
+
+
+<pre class="example">'data.frame':   5740 obs. of  26 variables:
+ $ ExperimentName        : Factor w/ 1 level "No_Context_S_script_v4": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Subject               : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ Block                 : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ List                  : Factor w/ 2 levels "","Stimuli": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Procedure.Block.      : Factor w/ 3 levels "BlockProc","BlockProc2",..: 3 3 3 3 3 3 3 3 3 3 ...
+ $ Animacy               : Factor w/ 3 levels "a","i","none": 3 3 3 3 3 3 3 3 3 3 ...
+ $ First_Phoneme         : Factor w/ 26 levels "@","a","A","b",..: 16 16 16 16 16 16 16 16 16 16 ...
+ $ Frequency_1           : Factor w/ 69 levels "0","1","10","101",..: 69 69 69 69 69 69 69 69 69 69 ...
+ $ Frequency_1_Origin    : Factor w/ 2 levels "KF","none": 2 2 2 2 2 2 2 2 2 2 ...
+ $ Frequency_2           : Factor w/ 126 levels "0","0.18","0.22",..: 126 126 126 126 126 126 126 126 126 126 ...
+ $ Frequency_2_Origin    : Factor w/ 2 levels "none","SUBTL": 1 1 1 1 1 1 1 1 1 1 ...
+ $ Language              : Factor w/ 2 levels "Eng","none": 2 2 2 2 2 2 2 2 2 2 ...
+ $ LDT_MeanRT            : Factor w/ 127 levels "510.094","521.971",..: 127 127 127 127 127 127 127 127 127 127 ...
+ $ Length                : Factor w/ 11 levels "10","11","12",..: 11 11 11 11 11 11 11 11 11 11 ...
+ $ LexChar               : Factor w/ 2 levels "ELP","none": 2 2 2 2 2 2 2 2 2 2 ...
+ $ MatchedEnglish        : Factor w/ 129 levels "antelope","artist",..: 70 70 70 70 70 70 70 70 70 70 ...
+ $ MatchedSpanish        : Factor w/ 129 levels "actuación","agujero",..: 98 98 98 98 98 98 98 98 98 98 ...
+ $ Naming_MeanRT         : Factor w/ 127 levels "545.143","546.107",..: 127 127 127 127 127 127 127 127 127 127 ...
+ $ Nphon                 : Factor w/ 10 levels "10","2","3","4",..: 10 10 10 10 10 10 10 10 10 10 ...
+ $ Nsyll                 : Factor w/ 5 levels "1","2","3","4",..: 5 5 5 5 5 5 5 5 5 5 ...
+ $ OrthographicSimilarity: Factor w/ 114 levels "0.026483051",..: 114 114 114 114 114 114 114 114 114 114 ...
+ $ Trial                 : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ CognateStatus         : Factor w/ 3 levels "Cog","Ncog","none": 3 3 3 3 3 3 3 3 3 3 ...
+ $ TargetWord            : Factor w/ 140 levels "antelope","artist",..: 20 75 13 11 32 78 27 71 110 112 ...
+ $ TargetWord.RT         : int  1 715 683 749 600 783 699 663 665 725 ...
+ $ Accuracy              : int  0 1 1 1 1 1 1 1 1 1 ...
+</pre>
+
+
+<p>
+From looking at <code>str()</code> we see that <code>TargetWord.RT</code> column is
+appropriately numeric, and the <code>CognateStatus</code> column is appropriately a
+factor. 
+</p>
+<p>
+However, we decide that we would like to to turn <code>Subject</code> and
+<code>Accuracy</code> into factors. We will get to this below. Make a comment in
+your script so you remember to do this. First , let's remove practice
+trials. In fact, we suggest making many comments to tell yourself what
+to do in plain English, and then translate it into R.
+</p>
+
+
+
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Remove practice trials. </span>
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Make Subject a factor</span>
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Fix the Accuracy column and then make Accuracy a factor</span>
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Removing practice trials</h3>
+<div class="outline-text-3" id="text-2-3">
+
+<p>Let's work on removing practice trials. Cari suggests running a
+cross-tabs (<code>xtabs()</code>), to check the number of practice trials you
+have, so then you can know when they've been removed.
+</p>
+
+
+
+<pre class="src src-R">xtabs(~monodata$Procedure.Block.)
+</pre>
+
+
+<pre class="example">
+monodata$Procedure.Block.
+    BlockProc    BlockProc2 PracBlockProc 
+         2624          2624           492
+</pre>
+
+
+<p>
+Now run the command to remove them. We want only our monolingual data
+where the <code>Procedure.Block.</code> column is not equal to <code>PracBlockProc</code>
+(E-Prime's opaque way of saying "Practice Block").
+</p>
+
+
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Remove practice trials. </span>
+monodata.noprac = monodata[monodata$Procedure.Block. != <span style="color: #8b2252;">"PracBlockProc"</span>,]
+head(monodata.noprac,20)
+</pre>
+
+
+
+<pre class="example">           ExperimentName Subject Block    List Procedure.Block. Animacy First_Phoneme Frequency_1
+13 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             s           6
+14 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             a           7
+15 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             f         133
+16 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             p         216
+17 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             r           6
+18 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             p         382
+19 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             f         331
+20 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             z           1
+21 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             p         247
+22 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             s         131
+23 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             h           6
+24 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             f           0
+25 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             h           0
+26 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             t          12
+27 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             p           4
+28 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             p           1
+29 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             b           2
+30 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             t          13
+31 No_Context_S_script_v4       1     2 Stimuli        BlockProc       i             p          20
+32 No_Context_S_script_v4       1     2 Stimuli        BlockProc       a             @          75
+   Frequency_1_Origin Frequency_2 Frequency_2_Origin Language LDT_MeanRT Length LexChar
+13                 KF        5.86              SUBTL      Eng    645.355      4     ELP
+14                 KF        0.98              SUBTL      Eng    711.129      8     ELP
+15                 KF      419.29              SUBTL      Eng    592.806      6     ELP
+16                 KF      233.14              SUBTL      Eng     539.71      5     ELP
+17                 KF       32.61              SUBTL      Eng    521.971      3     ELP
+18                 KF      140.67              SUBTL      Eng    709.667      9     ELP
+19                 KF      354.25              SUBTL      Eng    622.029      6     ELP
+20                 KF        2.82              SUBTL      Eng    716.515      6     ELP
+21                 KF       77.08              SUBTL      Eng    656.882      8     ELP
+22                 KF       43.04              SUBTL      Eng    568.303      7     ELP
+23                 KF        7.78              SUBTL      Eng    661.629      9     ELP
+24                 KF           0              SUBTL      Eng       &lt;NA&gt;     11     ELP
+25                 KF           0              SUBTL      Eng       &lt;NA&gt;      9     ELP
+26                 KF       25.61              SUBTL      Eng    510.094      4     ELP
+27                 KF        7.35              SUBTL      Eng    695.061      6     ELP
+28                 KF        4.08              SUBTL      Eng    620.647      7     ELP
+29                 KF        1.25              SUBTL      Eng    759.588      9     ELP
+30                 KF       22.84              SUBTL      Eng    651.219      5     ELP
+31                 KF       19.39              SUBTL      Eng    671.485      4     ELP
+32                 KF          24              SUBTL      Eng    674.355      8     ELP
+   MatchedEnglish MatchedSpanish Naming_MeanRT Nphon Nsyll OrthographicSimilarity Trial
+13           wall           muro       597.679     4     2            0.661538462     1
+14          puppy       cachorro       670.926     6     3             0.86746988     2
+15      president     presidente       599.667     5     1            0.058867362     3
+16       decision       decisión       558.036     5     2            0.078030303     4
+17       traveler        viajero       588.667     3     1            0.819260204     5
+18         friend          amiga       662.214     8     3             0.79543673     6
+19           boys          niños       608.393     6     3            0.731435777     7
+20         violin         violín       629.643     4     2            0.061941964     8
+21           soul           alma       612.926     8     2            0.907473029     9
+22     foreigners    extranjeros       693.704     6     2            0.342851307    10
+23    stepbrother    hermanastro        624.48     7     3            0.661508704    11
+24       reporter      reportero          &lt;NA&gt;     9     4            0.086206897    12
+25            bus            bus          &lt;NA&gt;     7     2            0.050736498    13
+26          flour         harina       574.731     4     1            0.577777778    14
+27         report          folio       650.889     5     2            0.773770492    15
+28         cereal         cereal       603.545     5     2            0.243460648    16
+29           lamb        cabrito       693.846     9     4                0.53675    17
+30          plate          plato       625.036     3     1                   0.56    18
+31            dog          perra       569.963     3     1            0.706666667    19
+32       workroom       despacho       646.464     5     3            0.927898551    20
+   CognateStatus  TargetWord TargetWord.RT Accuracy
+13           Cog        sofa           360        1
+14           Cog    antelope           540        0
+15          Ncog      friend           564        1
+16          Ncog       party           554        1
+17           Cog         rat           527        1
+18           Cog   president           535        1
+19           Cog      family           536        1
+20          Ncog      zipper           536        1
+21           Cog    problems           534        1
+22           Cog     student           475        1
+23           Cog   hamburger           613        1
+24          Ncog fisherwoman           607        1
+25          Ncog   hairspray           560        1
+26           Cog        tank           447        1
+27           Cog      pirate           553        1
+28          Ncog     peaches           607        0
+29           Cog   biologist           757        1
+30          Ncog       tower           483        3
+31           Cog        pipe           474        1
+32           Cog    official           552        1
+</pre>
+
+
+<p>
+Now check the <code>xtabs()</code> again to make sure that they've actually been removed.
+</p>
+
+
+<pre class="src src-R">xtabs(~monodata.noprac$Procedure.Block.)
+</pre>
+
+
+<pre class="example">
+monodata.noprac$Procedure.Block.
+    BlockProc    BlockProc2 PracBlockProc 
+         2624          2624             0
+</pre>
+
+
+<p>
+It turns out that I labeled levels of <code>CognateStatus</code> differently in
+practice trials compared to experimental trials. Hence, when we remove
+all the practice trials, we are stuck with an extra level of
+<code>CognateStatus</code> that we don't need anymore, because they were all
+removed when we cleaned out the practice trials.
+</p>
+<p>
+Additionally, there is also an unnecessary level of <code>Procedure.Block.</code>
+(<code>PracBlockProc</code>) which was removed. We can clean out these unused
+levels with R's <code>droplevels()</code> function. The function scans through
+each row of a column vector you specify, and checks to see if any
+level is in use. If it is, <code>droplevels()</code> keeps the level, if not, it
+removes it.
+</p>
+<p>
+Let's check <code>xtabs()</code> to see exactly what's going on.
+</p>
+<p>
+Note: we can use the <code>with()</code> function here so we don't have to keep
+typing the name of the dataset (<code>monodata</code>) that we're using. See how
+we have the extra <code>None</code> level and extra <code>PracBlocProc</code> level that all
+have 0 trials associated with them?
+</p>
+
+
+<pre class="src src-R">with(monodata.noprac,xtabs(~CognateStatus+Procedure.Block.))
+</pre>
+
+
+<pre class="example">
+             Procedure.Block.
+CognateStatus BlockProc BlockProc2 PracBlockProc
+         Cog       1298       1326             0
+         Ncog      1326       1298             0
+         none         0          0             0
+</pre>
+
+
+<p>
+Let's drop those levels! Then check <code>xtabs()</code> to see the difference.
+</p>
+
+
+<pre class="src src-R">monodata.noprac$CognateStatus <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$CognateStatus)
+monodata.noprac$Procedure.Block. <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$Procedure.Block.)
+with(monodata.noprac,xtabs(~CognateStatus+Procedure.Block.))
+</pre>
+
+
+<pre class="example">
+             Procedure.Block.
+CognateStatus BlockProc BlockProc2
+         Cog       1298       1326
+         Ncog      1326       1298
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>)</h3>
+<div class="outline-text-3" id="text-2-4">
+
+
+
+</div>
+
+<div id="outline-container-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Factoring <code>Subject</code></h4>
+<div class="outline-text-4" id="text-2-4-1">
+
+<p>Now let's factor the <code>Subject</code> column, like we said we would initially. We can use <code>str()</code> before and after to see the changes.
+</p>
+
+
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Make Subject a factor</span>
+str(monodata.noprac$Subject)
+monodata.noprac$Subject <span style="color: #008b8b;">&lt;-</span> as.factor(monodata.noprac$Subject)
+str(monodata.noprac$Subject)
+</pre>
+
+
+<pre class="example">
+ int [1:5248] 1 1 1 1 1 1 1 1 1 1 ...
+ Factor w/ 41 levels "1","2","3","10",..: 1 1 1 1 1 1 1 1 1 1 ...
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Fixing <code>Accuracy</code> and factoring it</h4>
+<div class="outline-text-4" id="text-2-4-2">
+
+<p>Now we can fix the RA mistakes, and factor the Accuracy column. What
+mistakes were made? Let's use <code>xtabs()</code> to check it out!
+</p>
+
+
+<pre class="src src-R">xtabs(~monodata.noprac$Accuracy)
+</pre>
+
+
+<pre class="example">
+monodata.noprac$Accuracy
+   0    1    3   11   44  111 
+ 153 5090    2    1    1    1
+</pre>
+
+
+<p>
+It appears that some of the accuracies, which are normally 0=incorrect
+and 1=correct got turned into other numbers. Well, I checked my video
+recording of my RAs during their coding session, and saw that they
+turned some 1 trials into random things like 111 or 11.
+</p>
+<p>
+Therefore, we should turn any non-1 or non-0 trial into a 1. We can
+use our where brackets to do this. We any <code>Accuracy</code> data where the
+accuracy is not a 0 or not a 1 to be replaced with a 1.
+</p>
+
+
+
+<pre class="src src-R">monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <span style="color: #008b8b;">&lt;-</span> 1
+</pre>
+
+
+
+<p>
+An equivalent way to do this.
+</p>
+
+
+<pre class="src src-R">monodata.noprac$Accuracy[monodata.noprac$Accuracy!=0 &amp; monodata.noprac$Accuracy!=1)] <span style="color: #008b8b;">&lt;-</span> 1
+</pre>
+
+
+<p>
+Check the <code>xtabs()</code> to see the difference. Now we have just 0 and 1. 
+</p>
+
+
+<pre class="src src-R">xtabs(~monodata.noprac$Accuracy)
+</pre>
+
+
+<pre class="example">
+monodata.noprac$Accuracy
+   0    1 
+ 153 5095
+</pre>
+
+
+<p>
+Now we can work on factoring our <code>Accuracy</code> data. Jason and Cari like
+to make a backup <code>Accuracy</code> column in case we ever want the numeric
+data again. Then we can factor! We'll check <code>str()</code> to see the
+change. After factoring, we can assign new labels (or factor <code>levels</code>)
+to our <code>Accuracy</code> factor. This makes reading <code>Accuracy</code> easy for
+humans. Any 0 will get the level "incorrect" and any 1 will get
+"correct."
+</p>
+
+
+
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Factor our accuracy data</span>
+monodata.noprac$originalacc = monodata.noprac$Accuracy
+monodata.noprac$Accuracy = as.factor(monodata.noprac$Accuracy)
+str(monodata.noprac$originalacc)
+str(monodata.noprac$Accuracy)
+levels(monodata.noprac$Accuracy) = c(<span style="color: #8b2252;">"incorrect"</span>,<span style="color: #8b2252;">"correct"</span>)
+xtabs(~monodata.noprac$Accuracy)
+</pre>
+
+
+<pre class="example">
+ num [1:5248] 1 0 1 1 1 1 1 1 1 1 ...
+ Factor w/ 2 levels "0","1": 2 1 2 2 2 2 2 2 2 2 ...
+monodata.noprac$Accuracy
+incorrect   correct 
+      153      5095
+</pre>
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Data aggregation: <code>tapply()</code></h3>
+<div class="outline-text-3" id="text-2-5">
+
+<p>Now that we have our data relatively clean of incorrect trials and
+practice trials, let's try our hands at data aggregation using the
+<code>tapply()</code> function. This function will take a dataset, split it by a
+set of factors you supply, and apply a function of your choice to a
+dependent variable of your choice.
+</p>
+<p>
+What we want to do with <code>monodata</code> is to find the mean reaction time
+for Cognates and Noncognates for each subject. This would give us
+summarized data that we could then run a repeated measures ANOVA on in
+SPSS for example.
+</p>
+<p>
+<code>tapply()</code> takes three main arguments. First, it wants what data
+column we want to aggregate. For now, that will be our <code>TargetWord.RT</code>
+vector. Next, it wants a <code>list()</code> of factors by which it will split
+our data up. We want to split our data by <code>Subject</code> and by
+<code>CognateStatus</code>. Finally, we need to supply <code>tapply()</code> with a function
+to apply to our data vector. We want to find the mean. We should also
+make sure that it's coerced to a <code>data.frame</code> for ease of use.
+</p>
+<p>
+A key thing we forgot to do in class is to aggregate only our correct
+data. In class we aggregated everything! Sorry about that. We have
+fixed this here by making a <code>data.frame</code> called <code>monodata.correct</code> which
+only contains correct trials.
+</p>
+
+
+
+<pre class="src src-R">monodata.correct <span style="color: #008b8b;">&lt;-</span> monodata.noprac[monodata.noprac$Accuracy==<span style="color: #8b2252;">"correct"</span>,]
+data.applied <span style="color: #008b8b;">&lt;-</span> tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
+data.applied <span style="color: #008b8b;">&lt;-</span> as.data.frame(data.applied)
+data.applied
+</pre>
+
+
+
+<pre class="example">    Cog Ncog
+1   508  476
+2   462  446
+3   472  462
+10  584  541
+11  473  457
+12  596  581
+18  571  532
+19  563  513
+20  526  534
+21  518  487
+22  466  465
+23  421  413
+24  450  423
+25  720  655
+26  483  494
+27  478  461
+28  613  607
+30  452  435
+31  485  589
+32  667  628
+33  595  563
+35  512  524
+36  445  442
+37  509  540
+38  588  584
+39  534  525
+153 463  452
+154 537  535
+155 326  269
+156   0    0
+157 561  547
+158 511  527
+159   0    0
+160 651  625
+161 341  337
+162 437  429
+163 597  571
+164 476  503
+165 469  509
+166 510  542
+167 488  485
+</pre>
+
+
+<p>
+<code>tapply()</code> is a bit funky. Our subject numbers were stored as
+<code>row.names</code>. Let's store them instead to a column, so we can reference
+them by name. We also might want to clean up our <code>colnames</code> so to
+explicitly include that RT was the measurement of interest.
+</p>
+
+
+
+<pre class="src src-R">data.applied$Subject <span style="color: #008b8b;">&lt;-</span> rownames(data.applied)
+colnames(data.applied)<span style="color: #008b8b;">&lt;-</span>c(<span style="color: #8b2252;">"Cog.RT"</span>,<span style="color: #8b2252;">"NCog.RT"</span>,<span style="color: #8b2252;">"Subject"</span>)
+data.applied
+</pre>
+
+
+
+<pre class="example">    Cog.RT NCog.RT Subject
+1      508     476       1
+2      462     446       2
+3      472     462       3
+10     584     541      10
+11     473     457      11
+12     596     581      12
+18     571     532      18
+19     563     513      19
+20     526     534      20
+21     518     487      21
+22     466     465      22
+23     421     413      23
+24     450     423      24
+25     720     655      25
+26     483     494      26
+27     478     461      27
+28     613     607      28
+30     452     435      30
+31     485     589      31
+32     667     628      32
+33     595     563      33
+35     512     524      35
+36     445     442      36
+37     509     540      37
+38     588     584      38
+39     534     525      39
+153    463     452     153
+154    537     535     154
+155    326     269     155
+156      0       0     156
+157    561     547     157
+158    511     527     158
+159      0       0     159
+160    651     625     160
+161    341     337     161
+162    437     429     162
+163    597     571     163
+164    476     503     164
+165    469     509     165
+166    510     542     166
+167    488     485     167
+</pre>
+
+
+<p>
+Alright, that seems good for today! Tomorrow we'll learn more about data aggregation, including a black-magic function that we like better than <code>tapply()</code>
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> The final script for today</h3>
+<div class="outline-text-3" id="text-2-6">
+
+<p>The final script looks something like this:
+</p>
+
+
+
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Read Jason's data</span>
+monodata = read.csv(<span style="color: #8b2252;">"./Real Datasets/monolingual_naming.csv"</span>)
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">remove practice from data</span>
+monodata.noprac = monodata[monodata$Procedure.Block. != <span style="color: #8b2252;">"PracBlockProc"</span>,]
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Remove none from cognate status, and remove practice level from Procedure.Block.</span>
+monodata.noprac$CognateStatus <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$CognateStatus)
+monodata.noprac$Procedure.Block. <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$Procedure.Block.)
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">make subject a factor</span>
+monodata.noprac$Subject <span style="color: #008b8b;">&lt;-</span> as.factor(monodata.noprac$Subject)
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">make accuracy a factor</span>
+monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <span style="color: #008b8b;">&lt;-</span> 1
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Preserve original accuracy data as numeric</span>
+monodata.noprac$originalacc = monodata.noprac$Accuracy
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Make Accuracy column a factor</span>
+monodata.noprac$Accuracy = as.factor(monodata.noprac$Accuracy)
+levels(monodata.noprac$Accuracy) = c(<span style="color: #8b2252;">"incorrect"</span>,<span style="color: #8b2252;">"correct"</span>)
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Aggregate our data using tapply(). Make sure to only include correct trials.</span>
+monodata.correct <span style="color: #008b8b;">&lt;-</span> monodata.noprac[monodata.noprac$Accuracy==<span style="color: #8b2252;">"correct"</span>,]
+
+data.applied <span style="color: #008b8b;">&lt;-</span> tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
+data.applied <span style="color: #008b8b;">&lt;-</span> as.data.frame(data.applied)
+
+data.applied$Subject <span style="color: #008b8b;">&lt;-</span> rownames(data.applied)
+colnames(data.applied)<span style="color: #008b8b;">&lt;-</span>c(<span style="color: #8b2252;">"Cog.RT"</span>,<span style="color: #8b2252;">"NCog.RT"</span>,<span style="color: #8b2252;">"Subject"</span>)
+</pre>
+
+
+
+<p>
+Tomorrow we'll look at aggregating this data using <code>tapply()</code> and <code>ddply()</code>.
+</p>
+
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-05-15 23:13:22 EDT</p>
+<p class="author">Author: Cari Bogulski, Jason Gullifer</p>
+<p class="creator">Org version 7.8.11 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
