@@ -1,4 +1,4 @@
-#+TITLE: Day 2 - Commented History from Class
+#+TITLE: Day 4 - Commented History from Class
 #+AUTHOR: Cari Bogulski, Jason Gullifer
 #+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
 #+PROPERTY: results output
