@@ -1,71 +1,96 @@
 # Read the csv, you might haver to change your file or folder name
 monodata<-read.csv("monolingual_naming.csv")
 
-#remove practice from data
+# Remove practice from data
 monodata.noprac = monodata[monodata$Procedure.Block. != "PracBlockProc",]
+# Jason's English monolingual word naming dataset
 
-#Remove none from cognate status, and remove practice level from Procedure.Block.
+# Remove "none" levels from cognate status; remove practice level from
+# Procedure.Block.; remove "none" levels from Animacy
+#
+# For the most part, adding this type of code needs to be done after
+# you realize later that you have extra levels that won't be used
+# after some form of subsetting
 monodata.noprac$CognateStatus <- droplevels(monodata.noprac$CognateStatus)
 monodata.noprac$Procedure.Block. <- droplevels(monodata.noprac$Procedure.Block.)
 monodata.noprac$Animacy <- droplevels(monodata.noprac$Animacy)
 
-#make subject a factor
+
+#Make subject a factor
 monodata.noprac$Subject <- as.factor(monodata.noprac$Subject)
 
-#Fix errors in Accuracy
+#Fix RA errors in Accuracy
 monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <- 1
 
-#Preserve original accuracy data as numeric
+#Preserve the now fixed original accuracy data as numeric
 monodata.noprac$originalacc = monodata.noprac$Accuracy
 
-#Make Accuracy column a factor
+#Make our Accuracy column a factor
 monodata.noprac$Accuracy = as.factor(monodata.noprac$Accuracy)
-levels(monodata.noprac$Accuracy) = c("incorrect","correct")
 
-#Make sure to only include correct trials.
+# Set the levels to "incorrect" and "correct"
+levels(monodata.noprac$Accuracy) = c("incorrect","correct") 
+
+# Make sure to only include correct trials.
 monodata.correct <- monodata.noprac[monodata.noprac$Accuracy=="correct",]
 
-#Aggregate our data using tapply(). 
-data.applied <- tapply(monodata.correct$TargetWord.RT, 
-	list(monodata.correct$Subject,
-	monodata.correct$CognateStatus),
-	mean)
-data.applied <- as.data.frame(data.applied)
-
-#Aggregate our data using tapply(). 
-data.applied2 <- tapply(monodata.correct$TargetWord.RT, 
-	list(monodata.correct$Subject,
-	monodata.correct$CognateStatus,
-	monodata.correct$Animacy),
-	mean)
-data.applied2 <- as.data.frame(data.applied2)
-
+# Aggregate our data using tapply().
+# Here we want to get the RT split by subject and cognate status
+data.applied <- tapply(monodata.correct$TargetWord.RT, #first give the data vector we want to aggregate, here RT
+        list(monodata.correct$Subject, monodata.correct$CognateStatus), #then give a list of factors to split the aggregation by
+        mean) #finally, give the function to apply to the split data vector
+data.applied <- as.data.frame(data.applied) #coerce to a data.frame because tapply returns a list
 data.applied$Subject <- rownames(data.applied)
 colnames(data.applied)<-c("Cog.RT","NCog.RT","Subject")
 
+# Aggregate our data using tapply(). Here we further aggregate our
+# data, this time asking for RTs by subject, by cognate status, by
+# animacy.
+# It's a bit more complicated, but everything is okay once coerced to
+# a data.frame
+data.applied2 <- tapply(monodata.correct$TargetWord.RT, 
+        list(monodata.correct$Subject,
+        monodata.correct$CognateStatus,
+        monodata.correct$Animacy), #not here we included an additional factor in out list()
+        mean)
+data.applied2 <- as.data.frame(data.applied2)
+data.applied2$Subject <- rownames(data.applied2)
+colnames(data.applied2)<-c("Cog.RT","NCog.RT","Subject")
 
 
+# Using ddply to do the same aggregation with subject, animacy, and
+# cognate status
+sumdata<-ddply(monodata.correct, 
+               .(Subject, CognateStatus, Animacy),summarise ,meanRT=mean(TargetWord.RT))
+
+
+
+# We can also do something more fancy where we calculate the mean, and
+# 2.5 SD above and below the mean (cut high and cutlow)
 
 sumdata<-ddply(monodata.correct, 
-	.(Subject, CognateStatus, Animacy),summarise ,meanRT=mean(TargetWord.RT), 
-	cuthigh = mean(TargetWord.RT) + 2.5 * sd(TargetWord.RT),
-	cutlow = mean(TargetWord.RT) - 2.5 * sd(TargetWord.RT))
+               .(Subject, CognateStatus, Animacy),summarise ,
+               meanRT=mean(TargetWord.RT),
+               cuthigh = mean(TargetWord.RT) + 2.5 * sd(TargetWord.RT),
+               cutlow = mean(TargetWord.RT) - 2.5 * sd(TargetWord.RT))
 
 
+# We might want to return the aggregated data back on to our original
+# data set. This is especially helpful for marking individual trials
+# as outliers. 
 
 transformeddata<-ddply(monodata.correct, 
-	.(Subject, CognateStatus, Animacy),transform ,meanRT=mean(TargetWord.RT), 
-	cuthigh = mean(TargetWord.RT) + 2.5 * sd(TargetWord.RT),
-	cutlow = mean(TargetWord.RT) - 2.5 * sd(TargetWord.RT))
+                       .(Subject, CognateStatus, Animacy),transform ,
+                       meanRT=mean(TargetWord.RT), 
+                       cuthigh = mean(TargetWord.RT) + 2.5 * sd(TargetWord.RT),
+                       cutlow = mean(TargetWord.RT) - 2.5 * sd(TargetWord.RT))
 
 transformeddata$Accuracy4Outliers <- transformeddata$Accuracy
 
+# Here we add a level to Accuracy, rel_outlier
 levels(transformeddata$Accuracy) <- c("incorrect", "correct", "rel_outlier")
 
-transformeddata$Accuracy[transformeddata$TargetWord.RT > transformeddata$cuthigh |
-	transformeddata$TargetWord.RT < transformeddata$cutlow] = "rel_outlier"
+# Now we can compare each RT to each cuthigh and cutlow, to determine whether the trial was an outlier
 
-
-
-
-
+transformeddata$Accuracy[transformeddata$TargetWord.RT > transformeddata$cuthigh | #if RT is greater than cuthigh
+        transformeddata$TargetWord.RT < transformeddata$cutlow] = "rel_outlier"    # or RT is lower than cutlow, assign "rel_outlier"

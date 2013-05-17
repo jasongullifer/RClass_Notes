@@ -1,3 +1,4 @@
+
 #+TITLE: Day 4 - Commented History from Class
 #+AUTHOR: Cari Bogulski, Jason Gullifer
 #+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
@@ -12,6 +13,9 @@ it written here, and the .R file linked to here as well.
 I plan to add more thorough documentation tomorrow.
 
 * Final Script
+
+[[./Script Files/monodata_script-5-16.R][Link to R script file]]
+
 Final Script printed here:
 #+begin_src R
 # Read the csv, you might haver to change your file or folder name
@@ -111,5 +115,3 @@ levels(transformeddata$Accuracy) <- c("incorrect", "correct", "rel_outlier")
 transformeddata$Accuracy[transformeddata$TargetWord.RT > transformeddata$cuthigh | #if RT is greater than cuthigh
 	transformeddata$TargetWord.RT < transformeddata$cutlow] = "rel_outlier"    # or RT is lower than cutlow, assign "rel_outlier"
 #+end_src
-
-[[./Script Files/monodata_script-5-16.R][Link to R script file]]
