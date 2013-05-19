@@ -272,7 +272,7 @@ data.casted <- cast(data.melted,
 
 * Final Script
 
-[[./Script Files/day5_script.R][Link to final R script file]]n
+[[./Script Files/day5_script.R][Link to final R script file]]
 
 Final Script printed here:
 #+begin_src R
