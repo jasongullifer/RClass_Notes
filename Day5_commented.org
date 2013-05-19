@@ -1,0 +1,373 @@
+#+TITLE: Day 5 - Commented History from Class
+#+AUTHOR: Cari Bogulski, Jason Gullifer
+#+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
+#+PROPERTY: results output
+#+PROPERTY: session *R*
+#+PROPERTY: exports both
+
+* Analyzing Simon Data Continued
+Today we continued analyzing Simon Data starting where Homework 4 left
+off. We added absolute outlier marking, and fixed how we marked
+relative outliers (marking them separately for correct and other
+trials). We then summarized the data using =ddply= and learned about
+how to use the =reshape= package to flexibly reshape data.
+
+** Homework 4 Solution Script
+
+You can download the Homework 4 solution file [[./Script Files/Homework_Set_4_solved.R][here]].
+
+Below we've cut down the homework 4 script file a bit, leaving only
+lines that manipulate and summarize the data. We removed calls to
+e.g. =xtabs()=. 
+#+begin_src R
+# Load packages
+library(plyr)
+library(reshape)
+
+# Load Data
+data_unfiltered <- read.csv("Cari_Simon_Data.csv")
+
+# Remove practice
+data <- data_unfiltered[data_unfiltered$Running!="PracTrials",]
+
+# Assign group names 
+data$Group[data$Subject > 100 & data$Subject < 200] = "Monolinguals"
+data$Group[data$Subject > 200 & data$Subject < 300] = "SpanEng_Bilinguals"
+data$Group[data$Subject > 300 & data$Subject < 400] = "ChineseEng_Bilinguals"
+data$Group[data$Subject > 400 & data$Subject < 500] = "EngSpan_Bilinguals"
+
+# Remove the participant whose number fall outside of these windows
+data = data[is.na(data$Group)==F,]
+
+
+# Preserve Stimulus.ACC as a new variable in data called "original_acc".
+# Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as
+# "correct". Also add the relative outliers column.
+
+data$original_acc = data$Stimulus.ACC
+data$Stimulus.ACC = as.factor(data$Stimulus.ACC)
+levels(data$Stimulus.ACC) = c("incorrect", "correct", "rel_outliers")
+
+# Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials 
+# that fall outside 2.5 standard deviations above and below the mean 
+# for each subject. Make sure to only use correct trials in that mean! 
+# Label these trials as "rel_outliers". Also use a fileorder vector to 
+# keep track of the original order othe dataset.
+
+data$FileOrder = seq(1,nrow(data))
+
+data = ddply(data, .(Subject), transform, 
+             high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
+             low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
+
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" & 
+                    (data$Stimulus.RT > data$high_cutoff | 
+                       data$Stimulus.RT < data$low_cutoff)]="rel_outliers"
+
+data = data[order(data$FileOrder),]
+
+# Calculate mean RT and Accuracy (taken from original acc) 
+# per Subject, per Group, and per condition (Congruency). For the mean RTs,
+# take only those those trials that were correct. Create a dataframe 
+# entitled "summary" that contains this information.
+
+summary = ddply(data[data$Stimulus.ACC=="correct",], .(Subject, Group,
+                Congruency), summarise, Mean.RT = mean(Stimulus.RT))
+
+# Your advisor also wants to see the data additionally broken down by block. 
+
+block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
+		.(Subject, Group, Congruency, Running), summarise,
+		Mean.RT = mean(Stimulus.RT))
+#+end_src
+
+** Modifications to the Simon Script
+*** Marking absolute outliers & Relative Outliers
+We started off by marking relative outliers, those trials which lie
+outside of 2.5 SD above and below each participant's mean. We
+typically also remove outliers that fall below 200ms (because such a
+fast response in a language experiment is likely due to an
+anticipatory button press) and above a certain threshold that might
+indicate that the subject was not paying attention (e.g., 2000 ms).
+
+First, we should establish the high and low cutoff. This should be
+done near the beginning of the script after loading libraries. This
+allows people reading your code to see that you've established some
+constant values that you will use later on.
+
+#+begin_src R
+absolute_outlier_high_cut = 2000
+absolute_outlier_low_cut = 200
+#+end_src
+
+Next, we now will add an additional level to the accuracy column of
+your dataset. This allows you to keep track of the number of relative
+and absolute outliers independently. We'll change out level-naming line to the following.
+
+#+begin_src R
+levels(data$Stimulus.ACC) = c("incorrect", "correct", "ab_outliers", "rel_outliers")
+#+end_src
+
+Now we actually mark absolute outlier trials. We typically do this
+directly before marking relative outliers. Compared to marking
+relative outliers, marking absolute outliers is easy, because you're
+using two static cutoffs, so no plying is necessary.
+
+#+begin_src R
+##Identify absolute outliers before relative outliers.
+data$Stimulus.ACC[data$Stimulus.RT > absolute_outlier_high_cut |
+data$Stimulus.RT < absolute_outlier_low_cut] = "ab_outliers"
+#+end_src
+
+Alright, so now we have a set of correct trials, incorrect trials, and
+abs_outlier trials. Next we'll calculate the relative outlier trials
+with a couple of tiny changes over last time. Before, we calculated
+relative outliers only by subject. However, this means that both
+correct trials and incorrect trials are included in this
+analysis. Because incorrect trials tend to be slower and because we're
+often not concerned about RTs for incorrect trials, we should leave
+them out of the relative outlier calculation. Additionally, we'll want
+to leave out any trials that we've just marked as absolute outliers.
+To do this, we can have =ddply()= split our data by subject and
+additionally by accuracy type (correct, incorrect, abs_outlier,
+rel_outlier) when performing the transform operation.
+
+We'll change out relative outlier detection accordingly to the code below.
+
+#+begin_src R
+# Maintain the original file order
+data$FileOrder = seq(1,nrow(data))
+
+# Calculate relative outliers by Subject and by ACC
+data = ddply(data, .(Subject, Stimulus.ACC), transform, 
+             high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
+             low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
+
+# Correct trials that are outside of the cutoffs defined above will be marked as 
+# relatively outlying.
+
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" & 
+                    (data$Stimulus.RT > data$high_cutoff | 
+                       data$Stimulus.RT < data$low_cutoff)]="rel_outliers"
+
+# Reorder the dataset as it originally was.
+data = data[order(data$FileOrder),]
+#+end_src
+
+*** Summarizing our Simon Data
+Now that we have marked outliers, two options exist to summarize the
+data depending on how you want the output to look: =plyr= and
+=reshape=.
+
+**** =ddply()=
+We can ply our data to get mean RTs by subject, by group, by
+condition.
+#+begin_src R
+summary = ddply(data[data$Stimulus.ACC=="correct",], 
+.(Subject, Group, Congruency), summarise,
+Mean.RT = mean(Stimulus.RT))
+
+summary
+#+end_src
+
+With =plyr=, it's relatively easy to go back and re-aggregate your data
+by additional factors. For example, if we want to split our data by
+block in the experiment, it's as easy as adding the blocking column to
+our =ddply()= call.
+#+begin_src R
+block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
+.(Subject, Group, Congruency, Running), summarise,
+Mean.RT = mean(Stimulus.RT))
+
+block_summary
+#+end_src
+
+**** =melt()= and =cast()= from the =reshape= package
+The reshape package is great for getting your data to look just the
+way you need it for various analyses. In addition to reshaping, it can
+and will perform an aggregation function (e.g., mean) if
+necessary. Reshape has two main functions, =melt()= and =cast()=. Melt
+creates a "molten" data.frame. =cast()= takes a molten data.frame and
+reshapes it to your specification.
+
+When melting your data, =melt()= needs to know two things, first what
+dataset you're melting. Second it needs to know either what your
+measure variables of interest are (=measure.vars= ) or what your
+identification variables are (=id.vars=). Measure variables are
+typically those that you're planning to aggregate (i.e., dependent
+variables). ID variables are essentially anything else. Typically it's
+easiest to specify whichever variables you have the least of, because
+=melt()= will assume that whatever is not specified will belong to the
+other set of variables. For example, if you specify one measure
+variable, everything else will be considered ID variables.
+
+For our Simon data, let's specify just the one measure variable of
+interest, RT. We can do separate melts for summary and for block
+summary.
+#+begin_src R
+summary_melt <- melt(summary,  #we're going to melt down summary
+                     measure.vars="Mean.RT") #our measure var is mean RT
+
+blocksummary_melt <- melt(block_summary, measure.vars="Mean.RT")
+#+end_src
+
+Now let's cast our melted data. =cast()= expects three
+arguments. First, it needs to know the name of the melted
+dataset. Next, it wants to know how to reshape your data. Finally, it
+needs an aggregation function (e.g., mean).
+
+The reshape equation consists of two parts separated by ~. On the left side are,
+generally, variables or factors that you want specified in each row of
+a column. These are typically between-subjects factors if you're
+thinking in the format of repeated measures ANOVA. For example, each
+subject you may want listed on a separate row of a subject
+column. Also, each subject belongs to only one group. Thus, subject
+and group should fall to the left side of the equation. 
+
+On the right side of the equation, you want to list factors or
+variables which will be separated into measure columns. In the context
+of repeated measures ANOVA, these are typically within subject
+variables. So for the Simon data, we want each condition of the
+congruency factor to be included in a column.  
+
+Finally, you should specify some aggregation function, such as
+mean. If you do not, =cast()= will just count the number of cells.
+
+#+begin_src R
+summary_recasted <- cast(summary_melt, #melted data to recast
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
+#+end_src
+
+Let's say we also wanted to include block of the experiment in this
+analysis as well. Each subject saw every block, so it's a repeated
+factor and hence can be added to the right side of the cast equation.
+#+begin_src R
+blocksummary_recasted <- cast(blocksummary_melt, 
+                              Subject+Group~Congruency+Running,mean)
+#+end_src
+
+Now the really cool thing about melt/cast is that they can function on
+your trial-level data and figure out the aggregation for you. So if
+you're planning on aggregating and reshaping your data, =ddply()= is not
+really necessary.
+
+#+begin_src R
+#Melt our correct data with measure a variable of =Stimulus.RT=
+data.melted <- melt(data[data$Stimulus.ACC=="correct",],
+     measure.vars="Stimulus.RT")
+
+data.casted <- cast(data.melted,
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
+#+end_src
+
+Really easy right? It's also easy to include additional factors
+here. Because we're working with melted trial level data, we don't
+even have to re-melt anything like we did for the summary datasets. We
+just add any factor to the equation in the appropriate place.
+
+#+begin_src R
+data.casted <- cast(data.melted,
+                         Subject + Group ~ Running+ Congruency, mean) #the formula then the aggregation
+#+end_src
+
+* Final Script
+
+[[./Script Files/day5_script.R][Link to final R script file]]n
+
+Final Script printed here:
+#+begin_src R
+# Load packages
+library(plyr)
+library(reshape)
+
+# Constants for outlier detection
+absolute_outlier_high_cut = 2000
+absolute_outlier_low_cut = 200
+
+# Load Data
+data_unfiltered <- read.csv("Cari_Simon_Data.csv")
+
+# Remove practice
+data <- data_unfiltered[data_unfiltered$Running!="PracTrials",]
+
+# Assign group names 
+data$Group[data$Subject > 100 & data$Subject < 200] = "Monolinguals"
+data$Group[data$Subject > 200 & data$Subject < 300] = "SpanEng_Bilinguals"
+data$Group[data$Subject > 300 & data$Subject < 400] = "ChineseEng_Bilinguals"
+data$Group[data$Subject > 400 & data$Subject < 500] = "EngSpan_Bilinguals"
+
+# Remove the participant whose number fall outside of these windows
+data = data[is.na(data$Group)==F,]
+
+
+# Preserve Stimulus.ACC as a new variable in data called "original_acc".
+# Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as
+# "correct". Also add the relative outliers column.
+
+data$original_acc = data$Stimulus.ACC
+data$Stimulus.ACC = as.factor(data$Stimulus.ACC)
+levels(data$Stimulus.ACC) = c("incorrect", "correct", "ab_outliers", "rel_outliers")
+
+# Identify absolute outliers before relative outliers.
+data$Stimulus.ACC[data$Stimulus.RT > absolute_outlier_high_cut |
+data$Stimulus.RT < absolute_outlier_low_cut] = "ab_outliers"
+
+
+# Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials 
+# that fall outside 2.5 standard deviations above and below the mean 
+# for each subject. Make sure to only use correct trials in that mean! 
+# Label these trials as "rel_outliers". Also use a fileorder vector to 
+# keep track of the original order othe dataset.
+
+data$FileOrder = seq(1,nrow(data))
+
+data = ddply(data, .(Subject, Stimulus.ACC), transform, 
+             high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
+             low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
+
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" & 
+                    (data$Stimulus.RT > data$high_cutoff | 
+                       data$Stimulus.RT < data$low_cutoff)]="rel_outliers"
+
+data = data[order(data$FileOrder),]
+
+# Calculate mean RT and Accuracy (taken from original acc) 
+# per Subject, per Group, and per condition (Congruency). For the mean RTs,
+# take only those those trials that were correct. Create a dataframe 
+# entitled "summary" that contains this information.
+
+# Using plyr
+
+summary = ddply(data[data$Stimulus.ACC=="correct",], 
+                 .(Subject, Group, Congruency), summarise,
+                 Mean.RT = mean(Stimulus.RT))
+
+block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
+                      .(Subject, Group, Congruency, Running), summarise,
+                      Mean.RT = mean(Stimulus.RT))
+
+
+# Reshaping the summary frame
+summary_melt <- melt(summary,  #we're going to melt down summary
+                     measure.vars="Mean.RT") #our measure var is mean RT
+
+blocksummary_melt <- melt(block_summary, measure.vars="Mean.RT")
+
+summary_recasted <- cast(summary_melt, #melted data to recast
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
+
+blocksummary_recasted <- cast(blocksummary_melt, 
+                              Subject+Group~Congruency+Running,mean)
+
+
+# Melting and casting our trial level data without using ddply
+data.melted <- melt(data[data$Stimulus.ACC=="correct",],
+     measure.vars="Stimulus.RT")
+
+data.casted <- cast(data.melted,
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
+
+#Add block if we want it
+data.casted <- cast(data.melted,
+                         Subject + Group ~ Running+ Congruency, mean) #the formula then the aggregation
+#+end_src
