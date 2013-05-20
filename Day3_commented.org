@@ -4,6 +4,7 @@
 #+PROPERTY: results output
 #+PROPERTY: session *R*
 #+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
 
 
 * A bit more on working with a =data.frame=

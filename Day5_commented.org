@@ -4,6 +4,7 @@
 #+PROPERTY: results output
 #+PROPERTY: session *R*
 #+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
 
 * Analyzing Simon Data Continued
 Today we continued analyzing Simon Data starting where Homework 4 left

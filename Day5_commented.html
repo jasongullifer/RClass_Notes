@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
 <head>
 <title>Day 5 - Commented History from Class</title>
 <meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
-<meta name="title" content="Day 5 - Commented History from Class"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-05-19 15:21:19 EDT"/>
+<meta name="generated" content="2013-05-20 11:32:50 "/>
 <meta name="author" content="Cari Bogulski, Jason Gullifer"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,9 +21,6 @@
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
-  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
-  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
-  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -34,23 +31,10 @@
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top;  }
-  th.right  { text-align:center;  }
-  th.left   { text-align:center;   }
-  th.center { text-align:center; }
-  td.right  { text-align:right;  }
-  td.left   { text-align:left;   }
-  td.center { text-align:center; }
+  td, th { vertical-align: top; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
-  div.inlinetask {
-    padding:10px;
-    border:2px solid gray;
-    margin:10px;
-    background: #ffffcc;
-  }
-  textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
   .org-info-js_info-navigation { border-style:none; }
@@ -60,6 +44,7 @@
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
 <script type="text/javascript">
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
@@ -82,15 +67,10 @@
  }
 /*]]>*///-->
 </script>
-
 </head>
 <body>
-
-<div id="preamble">
-
-</div>
-
 <div id="content">
+
 <h1 class="title">Day 5 - Commented History from Class</h1>
 
 
@@ -98,23 +78,23 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 Analyzing Simon Data Continued</a>
+<li><a href="#sec-1">1 Analyzing Simon Data Continued </a>
 <ul>
-<li><a href="#sec-1-1">1.1 Homework 4 Solution Script</a></li>
-<li><a href="#sec-1-2">1.2 Modifications to the Simon Script</a>
+<li><a href="#sec-1.1">1.1 Homework 4 Solution Script </a></li>
+<li><a href="#sec-1.2">1.2 Modifications to the Simon Script </a>
 <ul>
-<li><a href="#sec-1-2-1">1.2.1 Marking absolute outliers &amp; Relative Outliers</a></li>
-<li><a href="#sec-1-2-2">1.2.2 Summarizing our Simon Data</a></li>
+<li><a href="#sec-1.2.1">1.2.1 Marking absolute outliers &amp; Relative Outliers </a></li>
+<li><a href="#sec-1.2.2">1.2.2 Summarizing our Simon Data </a></li>
 </ul></li>
 </ul>
 </li>
-<li><a href="#sec-2">2 Final Script</a></li>
+<li><a href="#sec-2">2 Final Script </a></li>
 </ul>
 </div>
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Analyzing Simon Data Continued</h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> Analyzing Simon Data Continued </h2>
 <div class="outline-text-2" id="text-1">
 
 <p>Today we continued analyzing Simon Data starting where Homework 4 left
@@ -126,9 +106,9 @@ how to use the <code>reshape</code> package to flexibly reshape data.
 
 </div>
 
-<div id="outline-container-1-1" class="outline-3">
-<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Homework 4 Solution Script</h3>
-<div class="outline-text-3" id="text-1-1">
+<div id="outline-container-1.1" class="outline-3">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Homework 4 Solution Script </h3>
+<div class="outline-text-3" id="text-1.1">
 
 
 <p>
@@ -141,39 +121,39 @@ e.g. <code>xtabs()</code>.
 </p>
 
 
-<pre class="src src-R"><span style="color: #b22222;"># </span><span style="color: #b22222;">Load packages</span>
-<span style="color: #008b8b;">library</span>(plyr)
-<span style="color: #008b8b;">library</span>(reshape)
+<pre class="example"># Load packages
+library(plyr)
+library(reshape)
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Load Data</span>
-data_unfiltered <span style="color: #008b8b;">&lt;-</span> read.csv(<span style="color: #8b2252;">"Cari_Simon_Data.csv"</span>)
+# Load Data
+data_unfiltered &lt;- read.csv("Cari_Simon_Data.csv")
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Remove practice</span>
-data <span style="color: #008b8b;">&lt;-</span> data_unfiltered[data_unfiltered$Running!=<span style="color: #8b2252;">"PracTrials"</span>,]
+# Remove practice
+data &lt;- data_unfiltered[data_unfiltered$Running!="PracTrials",]
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Assign group names </span>
-data$Group[data$Subject &gt; 100 &amp; data$Subject &lt; 200] = <span style="color: #8b2252;">"Monolinguals"</span>
-data$Group[data$Subject &gt; 200 &amp; data$Subject &lt; 300] = <span style="color: #8b2252;">"SpanEng_Bilinguals"</span>
-data$Group[data$Subject &gt; 300 &amp; data$Subject &lt; 400] = <span style="color: #8b2252;">"ChineseEng_Bilinguals"</span>
-data$Group[data$Subject &gt; 400 &amp; data$Subject &lt; 500] = <span style="color: #8b2252;">"EngSpan_Bilinguals"</span>
+# Assign group names 
+data$Group[data$Subject &gt; 100 &amp; data$Subject &lt; 200] = "Monolinguals"
+data$Group[data$Subject &gt; 200 &amp; data$Subject &lt; 300] = "SpanEng_Bilinguals"
+data$Group[data$Subject &gt; 300 &amp; data$Subject &lt; 400] = "ChineseEng_Bilinguals"
+data$Group[data$Subject &gt; 400 &amp; data$Subject &lt; 500] = "EngSpan_Bilinguals"
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Remove the participant whose number fall outside of these windows</span>
+# Remove the participant whose number fall outside of these windows
 data = data[is.na(data$Group)==F,]
 
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Preserve Stimulus.ACC as a new variable in data called "original_acc".</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">"correct". Also add the relative outliers column.</span>
+# Preserve Stimulus.ACC as a new variable in data called "original_acc".
+# Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as
+# "correct". Also add the relative outliers column.
 
 data$original_acc = data$Stimulus.ACC
 data$Stimulus.ACC = as.factor(data$Stimulus.ACC)
-levels(data$Stimulus.ACC) = c(<span style="color: #8b2252;">"incorrect"</span>, <span style="color: #8b2252;">"correct"</span>, <span style="color: #8b2252;">"rel_outliers"</span>)
+levels(data$Stimulus.ACC) = c("incorrect", "correct", "rel_outliers")
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">that fall outside 2.5 standard deviations above and below the mean </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">for each subject. Make sure to only use correct trials in that mean! </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Label these trials as "rel_outliers". Also use a fileorder vector to </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">keep track of the original order othe dataset.</span>
+# Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials 
+# that fall outside 2.5 standard deviations above and below the mean 
+# for each subject. Make sure to only use correct trials in that mean! 
+# Label these trials as "rel_outliers". Also use a fileorder vector to 
+# keep track of the original order othe dataset.
 
 data$FileOrder = seq(1,nrow(data))
 
@@ -181,42 +161,44 @@ data = ddply(data, .(Subject), transform,
              high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
              low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
 
-data$Stimulus.ACC[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span> &amp; 
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" &amp; 
                     (data$Stimulus.RT &gt; data$high_cutoff | 
-                       data$Stimulus.RT &lt; data$low_cutoff)]=<span style="color: #8b2252;">"rel_outliers"</span>
+                       data$Stimulus.RT &lt; data$low_cutoff)]="rel_outliers"
 
 data = data[order(data$FileOrder),]
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Calculate mean RT and Accuracy (taken from original acc) </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">per Subject, per Group, and per condition (Congruency). For the mean RTs,</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">take only those those trials that were correct. Create a dataframe </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">entitled "summary" that contains this information.</span>
+# Calculate mean RT and Accuracy (taken from original acc) 
+# per Subject, per Group, and per condition (Congruency). For the mean RTs,
+# take only those those trials that were correct. Create a dataframe 
+# entitled "summary" that contains this information.
 
-summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], .(Subject, Group,
+summary = ddply(data[data$Stimulus.ACC=="correct",], .(Subject, Group,
                 Congruency), summarise, Mean.RT = mean(Stimulus.RT))
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Your advisor also wants to see the data additionally broken down by block. </span>
+# Your advisor also wants to see the data additionally broken down by block. 
 
-block_summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], 
+block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
                 .(Subject, Group, Congruency, Running), summarise,
                 Mean.RT = mean(Stimulus.RT))
 </pre>
 
 
-</div>
-
-</div>
-
-<div id="outline-container-1-2" class="outline-3">
-<h3 id="sec-1-2"><span class="section-number-3">1.2</span> Modifications to the Simon Script</h3>
-<div class="outline-text-3" id="text-1-2">
 
 
 </div>
 
-<div id="outline-container-1-2-1" class="outline-4">
-<h4 id="sec-1-2-1"><span class="section-number-4">1.2.1</span> Marking absolute outliers &amp; Relative Outliers</h4>
-<div class="outline-text-4" id="text-1-2-1">
+</div>
+
+<div id="outline-container-1.2" class="outline-3">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Modifications to the Simon Script </h3>
+<div class="outline-text-3" id="text-1.2">
+
+
+</div>
+
+<div id="outline-container-1.2.1" class="outline-4">
+<h4 id="sec-1.2.1"><span class="section-number-4">1.2.1</span> Marking absolute outliers &amp; Relative Outliers </h4>
+<div class="outline-text-4" id="text-1.2.1">
 
 <p>We started off by marking relative outliers, those trials which lie
 outside of 2.5 SD above and below each participant's mean. We
@@ -234,9 +216,11 @@ constant values that you will use later on.
 
 
 
-<pre class="src src-R">absolute_outlier_high_cut = 2000
+<pre class="example">absolute_outlier_high_cut = 2000
 absolute_outlier_low_cut = 200
 </pre>
+
+
 
 
 <p>
@@ -247,8 +231,10 @@ and absolute outliers independently. We'll change out level-naming line to the f
 
 
 
-<pre class="src src-R">levels(data$Stimulus.ACC) = c(<span style="color: #8b2252;">"incorrect"</span>, <span style="color: #8b2252;">"correct"</span>, <span style="color: #8b2252;">"ab_outliers"</span>, <span style="color: #8b2252;">"rel_outliers"</span>)
+<pre class="example">levels(data$Stimulus.ACC) = c("incorrect", "correct", "ab_outliers", "rel_outliers")
 </pre>
+
+
 
 
 <p>
@@ -260,10 +246,12 @@ using two static cutoffs, so no plying is necessary.
 
 
 
-<pre class="src src-R"><span style="color: #b22222;">##</span><span style="color: #b22222;">Identify absolute outliers before relative outliers.</span>
+<pre class="example">##Identify absolute outliers before relative outliers.
 data$Stimulus.ACC[data$Stimulus.RT &gt; absolute_outlier_high_cut |
-data$Stimulus.RT &lt; absolute_outlier_low_cut] = <span style="color: #8b2252;">"ab_outliers"</span>
+data$Stimulus.RT &lt; absolute_outlier_low_cut] = "ab_outliers"
 </pre>
+
+
 
 
 <p>
@@ -286,51 +274,55 @@ We'll change out relative outlier detection accordingly to the code below.
 
 
 
-<pre class="src src-R"><span style="color: #b22222;"># </span><span style="color: #b22222;">Maintain the original file order</span>
+<pre class="example"># Maintain the original file order
 data$FileOrder = seq(1,nrow(data))
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Calculate relative outliers by Subject and by ACC</span>
+# Calculate relative outliers by Subject and by ACC
 data = ddply(data, .(Subject, Stimulus.ACC), transform, 
              high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
              low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Correct trials that are outside of the cutoffs defined above will be marked as </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">relatively outlying.</span>
+# Correct trials that are outside of the cutoffs defined above will be marked as 
+# relatively outlying.
 
-data$Stimulus.ACC[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span> &amp; 
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" &amp; 
                     (data$Stimulus.RT &gt; data$high_cutoff | 
-                       data$Stimulus.RT &lt; data$low_cutoff)]=<span style="color: #8b2252;">"rel_outliers"</span>
+                       data$Stimulus.RT &lt; data$low_cutoff)]="rel_outliers"
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Reorder the dataset as it originally was.</span>
+# Reorder the dataset as it originally was.
 data = data[order(data$FileOrder),]
 </pre>
 
 
-</div>
+
 
 </div>
 
-<div id="outline-container-1-2-2" class="outline-4">
-<h4 id="sec-1-2-2"><span class="section-number-4">1.2.2</span> Summarizing our Simon Data</h4>
-<div class="outline-text-4" id="text-1-2-2">
+</div>
+
+<div id="outline-container-1.2.2" class="outline-4">
+<h4 id="sec-1.2.2"><span class="section-number-4">1.2.2</span> Summarizing our Simon Data </h4>
+<div class="outline-text-4" id="text-1.2.2">
 
 <p>Now that we have marked outliers, two options exist to summarize the
 data depending on how you want the output to look: <code>plyr</code> and
 <code>reshape</code>.
 </p>
 <ul>
-<li id="sec-1-2-2-1"><code>ddply()</code><br/>
+<li id="sec-1.2.2.1"><code>ddply()</code> <br/>
 We can ply our data to get mean RTs by subject, by group, by
 condition.
 
 
 
-<pre class="src src-R">summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], 
+<pre class="example">summary = ddply(data[data$Stimulus.ACC=="correct",], 
 .(Subject, Group, Congruency), summarise,
 Mean.RT = mean(Stimulus.RT))
 
 summary
 </pre>
+
+
 
 
 <p>
@@ -341,7 +333,7 @@ our <code>ddply()</code> call.
 </p>
 
 
-<pre class="src src-R">block_summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], 
+<pre class="example">block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
 .(Subject, Group, Congruency, Running), summarise,
 Mean.RT = mean(Stimulus.RT))
 
@@ -349,10 +341,10 @@ block_summary
 </pre>
 
 
+
+
 </li>
-</ul>
-<ul>
-<li id="sec-1-2-2-2"><code>melt()</code> and <code>cast()</code> from the <code>reshape</code> package<br/>
+<li id="sec-1.2.2.2"><code>melt()</code> and <code>cast()</code> from the <code>reshape</code> package <br/>
 The reshape package is great for getting your data to look just the
 way you need it for various analyses. In addition to reshaping, it can
 and will perform an aggregation function (e.g., mean) if
@@ -379,11 +371,13 @@ summary.
 </p>
 
 
-<pre class="src src-R">summary_melt <span style="color: #008b8b;">&lt;-</span> melt(summary,  <span style="color: #b22222;">#</span><span style="color: #b22222;">we're going to melt down summary</span>
-                     measure.vars=<span style="color: #8b2252;">"Mean.RT"</span>) <span style="color: #b22222;">#</span><span style="color: #b22222;">our measure var is mean RT</span>
+<pre class="example">summary_melt &lt;- melt(summary,  #we're going to melt down summary
+                     measure.vars="Mean.RT") #our measure var is mean RT
 
-blocksummary_melt <span style="color: #008b8b;">&lt;-</span> melt(block_summary, measure.vars=<span style="color: #8b2252;">"Mean.RT"</span>)
+blocksummary_melt &lt;- melt(block_summary, measure.vars="Mean.RT")
 </pre>
+
+
 
 
 <p>
@@ -415,9 +409,11 @@ mean. If you do not, <code>cast()</code> will just count the number of cells.
 
 
 
-<pre class="src src-R">summary_recasted <span style="color: #008b8b;">&lt;-</span> cast(summary_melt, <span style="color: #b22222;">#</span><span style="color: #b22222;">melted data to recast</span>
-                         Subject + Group ~ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+<pre class="example">summary_recasted &lt;- cast(summary_melt, #melted data to recast
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
 </pre>
+
+
 
 
 <p>
@@ -427,9 +423,11 @@ factor and hence can be added to the right side of the cast equation.
 </p>
 
 
-<pre class="src src-R">blocksummary_recasted <span style="color: #008b8b;">&lt;-</span> cast(blocksummary_melt, 
+<pre class="example">blocksummary_recasted &lt;- cast(blocksummary_melt, 
                               Subject+Group~Congruency+Running,mean)
 </pre>
+
+
 
 
 <p>
@@ -441,13 +439,15 @@ really necessary.
 
 
 
-<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Melt our correct data with measure a variable of =Stimulus.RT=</span>
-data.melted <span style="color: #008b8b;">&lt;-</span> melt(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,],
-     measure.vars=<span style="color: #8b2252;">"Stimulus.RT"</span>)
+<pre class="example">#Melt our correct data with measure a variable of =Stimulus.RT=
+data.melted &lt;- melt(data[data$Stimulus.ACC=="correct",],
+     measure.vars="Stimulus.RT")
 
-data.casted <span style="color: #008b8b;">&lt;-</span> cast(data.melted,
-                         Subject + Group ~ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+data.casted &lt;- cast(data.melted,
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
 </pre>
+
+
 
 
 <p>
@@ -459,9 +459,11 @@ just add any factor to the equation in the appropriate place.
 
 
 
-<pre class="src src-R">data.casted <span style="color: #008b8b;">&lt;-</span> cast(data.melted,
-                         Subject + Group ~ Running+ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+<pre class="example">data.casted &lt;- cast(data.melted,
+                         Subject + Group ~ Running+ Congruency, mean) #the formula then the aggregation
 </pre>
+
+
 
 
 </li>
@@ -473,7 +475,7 @@ just add any factor to the equation in the appropriate place.
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Final Script</h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Final Script </h2>
 <div class="outline-text-2" id="text-2">
 
 
@@ -485,48 +487,48 @@ Final Script printed here:
 </p>
 
 
-<pre class="src src-R"><span style="color: #b22222;"># </span><span style="color: #b22222;">Load packages</span>
-<span style="color: #008b8b;">library</span>(plyr)
-<span style="color: #008b8b;">library</span>(reshape)
+<pre class="example"># Load packages
+library(plyr)
+library(reshape)
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Constants for outlier detection</span>
+# Constants for outlier detection
 absolute_outlier_high_cut = 2000
 absolute_outlier_low_cut = 200
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Load Data</span>
-data_unfiltered <span style="color: #008b8b;">&lt;-</span> read.csv(<span style="color: #8b2252;">"Cari_Simon_Data.csv"</span>)
+# Load Data
+data_unfiltered &lt;- read.csv("Cari_Simon_Data.csv")
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Remove practice</span>
-data <span style="color: #008b8b;">&lt;-</span> data_unfiltered[data_unfiltered$Running!=<span style="color: #8b2252;">"PracTrials"</span>,]
+# Remove practice
+data &lt;- data_unfiltered[data_unfiltered$Running!="PracTrials",]
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Assign group names </span>
-data$Group[data$Subject &gt; 100 &amp; data$Subject &lt; 200] = <span style="color: #8b2252;">"Monolinguals"</span>
-data$Group[data$Subject &gt; 200 &amp; data$Subject &lt; 300] = <span style="color: #8b2252;">"SpanEng_Bilinguals"</span>
-data$Group[data$Subject &gt; 300 &amp; data$Subject &lt; 400] = <span style="color: #8b2252;">"ChineseEng_Bilinguals"</span>
-data$Group[data$Subject &gt; 400 &amp; data$Subject &lt; 500] = <span style="color: #8b2252;">"EngSpan_Bilinguals"</span>
+# Assign group names 
+data$Group[data$Subject &gt; 100 &amp; data$Subject &lt; 200] = "Monolinguals"
+data$Group[data$Subject &gt; 200 &amp; data$Subject &lt; 300] = "SpanEng_Bilinguals"
+data$Group[data$Subject &gt; 300 &amp; data$Subject &lt; 400] = "ChineseEng_Bilinguals"
+data$Group[data$Subject &gt; 400 &amp; data$Subject &lt; 500] = "EngSpan_Bilinguals"
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Remove the participant whose number fall outside of these windows</span>
+# Remove the participant whose number fall outside of these windows
 data = data[is.na(data$Group)==F,]
 
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Preserve Stimulus.ACC as a new variable in data called "original_acc".</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">"correct". Also add the relative outliers column.</span>
+# Preserve Stimulus.ACC as a new variable in data called "original_acc".
+# Make Stimulus.ACC a factor, labeling 0s as "incorrect" and 1s as
+# "correct". Also add the relative outliers column.
 
 data$original_acc = data$Stimulus.ACC
 data$Stimulus.ACC = as.factor(data$Stimulus.ACC)
-levels(data$Stimulus.ACC) = c(<span style="color: #8b2252;">"incorrect"</span>, <span style="color: #8b2252;">"correct"</span>, <span style="color: #8b2252;">"ab_outliers"</span>, <span style="color: #8b2252;">"rel_outliers"</span>)
+levels(data$Stimulus.ACC) = c("incorrect", "correct", "ab_outliers", "rel_outliers")
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Identify absolute outliers before relative outliers.</span>
+# Identify absolute outliers before relative outliers.
 data$Stimulus.ACC[data$Stimulus.RT &gt; absolute_outlier_high_cut |
-data$Stimulus.RT &lt; absolute_outlier_low_cut] = <span style="color: #8b2252;">"ab_outliers"</span>
+data$Stimulus.RT &lt; absolute_outlier_low_cut] = "ab_outliers"
 
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">that fall outside 2.5 standard deviations above and below the mean </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">for each subject. Make sure to only use correct trials in that mean! </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Label these trials as "rel_outliers". Also use a fileorder vector to </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">keep track of the original order othe dataset.</span>
+# Using ddply(), identify FROM THE CORRECT TRIALS ONLY the trials 
+# that fall outside 2.5 standard deviations above and below the mean 
+# for each subject. Make sure to only use correct trials in that mean! 
+# Label these trials as "rel_outliers". Also use a fileorder vector to 
+# keep track of the original order othe dataset.
 
 data$FileOrder = seq(1,nrow(data))
 
@@ -534,63 +536,65 @@ data = ddply(data, .(Subject, Stimulus.ACC), transform,
              high_cutoff = mean(Stimulus.RT) + 2.5*sd(Stimulus.RT),
              low_cutoff = mean(Stimulus.RT - 2.5*sd(Stimulus.RT)))
 
-data$Stimulus.ACC[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span> &amp; 
+data$Stimulus.ACC[data$Stimulus.ACC=="correct" &amp; 
                     (data$Stimulus.RT &gt; data$high_cutoff | 
-                       data$Stimulus.RT &lt; data$low_cutoff)]=<span style="color: #8b2252;">"rel_outliers"</span>
+                       data$Stimulus.RT &lt; data$low_cutoff)]="rel_outliers"
 
 data = data[order(data$FileOrder),]
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Calculate mean RT and Accuracy (taken from original acc) </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">per Subject, per Group, and per condition (Congruency). For the mean RTs,</span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">take only those those trials that were correct. Create a dataframe </span>
-<span style="color: #b22222;"># </span><span style="color: #b22222;">entitled "summary" that contains this information.</span>
+# Calculate mean RT and Accuracy (taken from original acc) 
+# per Subject, per Group, and per condition (Congruency). For the mean RTs,
+# take only those those trials that were correct. Create a dataframe 
+# entitled "summary" that contains this information.
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Using plyr</span>
+# Using plyr
 
-summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], 
+summary = ddply(data[data$Stimulus.ACC=="correct",], 
                  .(Subject, Group, Congruency), summarise,
                  Mean.RT = mean(Stimulus.RT))
 
-block_summary = ddply(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,], 
+block_summary = ddply(data[data$Stimulus.ACC=="correct",], 
                       .(Subject, Group, Congruency, Running), summarise,
                       Mean.RT = mean(Stimulus.RT))
 
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Reshaping the summary frame</span>
-summary_melt <span style="color: #008b8b;">&lt;-</span> melt(summary,  <span style="color: #b22222;">#</span><span style="color: #b22222;">we're going to melt down summary</span>
-                     measure.vars=<span style="color: #8b2252;">"Mean.RT"</span>) <span style="color: #b22222;">#</span><span style="color: #b22222;">our measure var is mean RT</span>
+# Reshaping the summary frame
+summary_melt &lt;- melt(summary,  #we're going to melt down summary
+                     measure.vars="Mean.RT") #our measure var is mean RT
 
-blocksummary_melt <span style="color: #008b8b;">&lt;-</span> melt(block_summary, measure.vars=<span style="color: #8b2252;">"Mean.RT"</span>)
+blocksummary_melt &lt;- melt(block_summary, measure.vars="Mean.RT")
 
-summary_recasted <span style="color: #008b8b;">&lt;-</span> cast(summary_melt, <span style="color: #b22222;">#</span><span style="color: #b22222;">melted data to recast</span>
-                         Subject + Group ~ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+summary_recasted &lt;- cast(summary_melt, #melted data to recast
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
 
-blocksummary_recasted <span style="color: #008b8b;">&lt;-</span> cast(blocksummary_melt, 
+blocksummary_recasted &lt;- cast(blocksummary_melt, 
                               Subject+Group~Congruency+Running,mean)
 
 
-<span style="color: #b22222;"># </span><span style="color: #b22222;">Melting and casting our trial level data without using ddply</span>
-data.melted <span style="color: #008b8b;">&lt;-</span> melt(data[data$Stimulus.ACC==<span style="color: #8b2252;">"correct"</span>,],
-     measure.vars=<span style="color: #8b2252;">"Stimulus.RT"</span>)
+# Melting and casting our trial level data without using ddply
+data.melted &lt;- melt(data[data$Stimulus.ACC=="correct",],
+     measure.vars="Stimulus.RT")
 
-data.casted <span style="color: #008b8b;">&lt;-</span> cast(data.melted,
-                         Subject + Group ~ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+data.casted &lt;- cast(data.melted,
+                         Subject + Group ~ Congruency, mean) #the formula then the aggregation
 
-<span style="color: #b22222;">#</span><span style="color: #b22222;">Add block if we want it</span>
-data.casted <span style="color: #008b8b;">&lt;-</span> cast(data.melted,
-                         Subject + Group ~ Running+ Congruency, mean) <span style="color: #b22222;">#</span><span style="color: #b22222;">the formula then the aggregation</span>
+#Add block if we want it
+data.casted &lt;- cast(data.melted,
+                         Subject + Group ~ Running+ Congruency, mean) #the formula then the aggregation
 </pre>
 
-</div>
-</div>
-</div>
 
+
+</div>
+</div>
 <div id="postamble">
-<p class="date">Date: 2013-05-19 15:21:19 EDT</p>
-<p class="author">Author: Cari Bogulski, Jason Gullifer</p>
-<p class="creator">Org version 7.8.11 with Emacs version 23</p>
-<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
-
+<p class="author"> Author: Cari Bogulski, Jason Gullifer
+<a href="mailto:cari.bogulski@gmail.com">&lt;cari.bogulski@gmail.com&gt;</a>
+<a href="mailto:jason.gullifer@gmail.com">&lt;jason.gullifer@gmail.com&gt;</a>
+</p>
+<p class="date"> Date: 2013-05-20 11:32:50 </p>
+<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+</div>
 </div>
 </body>
 </html>

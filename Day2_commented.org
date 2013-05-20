@@ -2,7 +2,7 @@
 #+AUTHOR: Cari Bogulski, Jason Gullifer
 #+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
 #+BABEL: :session *R*
-
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
 
 * Working with data.frame
 ** Load our heights data and get the dimensions

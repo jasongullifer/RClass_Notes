@@ -5,6 +5,7 @@
 #+PROPERTY: results output
 #+PROPERTY: session *R*
 #+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
 
 This commented history isn't as detailed. I posted the final script
 from today, and added additional comments in the script. You can find
