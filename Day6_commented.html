@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Day 6 - Commented History from Class</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Day 6 - Commented History from Class"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-05-20 22:00:29 EDT"/>
+<meta name="author" content="Cari Bogulski, Jason Gullifer"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Day 6 - Commented History from Class</h1>
+
+<p>Today we learned about conducting ANOVA in R, and we practiced the
+<code>ToothGrowth</code> dataset, available under the base installation of
+R. <code>ToothGrowth</code> investigates the effect of Vitamin C on tooth growth in
+Guinea Pigs. Ten Pigs were dosed with Vitamin C either through orange
+juice or asorbic acid. There were three dosage levels, .5 mg, 1 mg,
+and 2 mg. 
+</p>
+<p>
+To analyze <code>ToothGrowth</code>, we first conducted some data manipulation so
+we could export the results in a format for conducting repeated
+measures in SPSS. Then we ran the same test in R using the <code>ez</code>
+package.
+</p>
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Obtaining <code>ToothGrowth</code></a></li>
+<li><a href="#sec-2">2 Preliminaries</a></li>
+<li><a href="#sec-3">3 Aggregating to SPSS's repeated measures format: <code>melt()</code> and <code>cast()</code></a></li>
+<li><a href="#sec-4">4 Repeated measures in R, truly <code>ez</code>.</a></li>
+<li><a href="#sec-5">5 Final Script</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Obtaining <code>ToothGrowth</code></h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+The dataset is available on any R installation. It can be imported
+into the worskpace with the <code>data()</code> function. We then chose to give it
+the name <code>data</code>.
+</p>
+
+
+
+<pre class="src src-R">data(ToothGrowth) <span style="color: #b22222;">#</span><span style="color: #b22222;">put a data.frame ToothGrowth on the workspace</span>
+
+data = ToothGrowth <span style="color: #b22222;">#</span><span style="color: #b22222;">copy the dataset to data</span>
+head(data)
+</pre>
+
+
+<pre class="example">
+   len supp dose
+1  4.2   VC  0.5
+2 11.5   VC  0.5
+3  7.3   VC  0.5
+4  5.8   VC  0.5
+5  6.4   VC  0.5
+6 10.0   VC  0.5
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Preliminaries</h2>
+<div class="outline-text-2" id="text-2">
+
+<p>The <code>ToothGrowth</code> data is a bit opaquely labeled. We can check what
+each column corresponds to with the <code>?</code> command. We'll have to use <code>?</code>
+on the original dataset <code>ToothGrowth</code> not our <code>data</code> in order to get
+the help.
+</p>
+
+
+
+<pre class="src src-R">?ToothGrowth
+</pre>
+
+
+<p>
+After reading the help, we find out that these data are from a
+repeated measures experiment. However, there is no column that
+specifically indicates the subject number (or pig number). Let's add
+one. For this we need to create a column of the numbers 1-10 that
+repeats 6 times, one for each pig in each dose level of each
+supplement. The <code>seq()</code> command will give us a sequence, e.g. of
+1-10. The <code>rep()</code> command can be used to repeat something a given
+number of times, e.g. 6.
+</p>
+<p>
+We should also turn <code>dose</code> into a factor; it's presently numeric. 
+</p>
+
+
+
+<pre class="src src-R">data$pig = rep(seq(1,10),6)
+data$dose <span style="color: #008b8b;">&lt;-</span> as.factor(data$dose)
+head(data)
+</pre>
+
+
+<pre class="example">
+   len supp dose pig
+1  4.2   VC  0.5   1
+2 11.5   VC  0.5   2
+3  7.3   VC  0.5   3
+4  5.8   VC  0.5   4
+5  6.4   VC  0.5   5
+6 10.0   VC  0.5   6
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Aggregating to SPSS's repeated measures format: <code>melt()</code> and <code>cast()</code></h2>
+<div class="outline-text-2" id="text-3">
+
+<p>Remember that users of SPSS will want to have one row per participant,
+which different measures (i.e., mixtures of conditions) going across
+the top in separate columns.
+</p>
+<p>
+To do this we use the melt command. We want to <code>melt</code> data treating
+<code>len</code> (the length of the tooth) as a measure variable. We just as well
+could have given <code>c("supp","dose","pig")</code> as id variables, but that
+results in more typing. <code>melt()</code> will assume that anything you didn't
+specify as a measure variable is a id variable. Similarly, <code>melt()</code>
+will assume that if you specify only id variables, anything you didn't
+specify as an id variable will be a measure variable.
+</p>
+
+
+
+<pre class="src src-R">data_melted = melt(data, measure.vars=<span style="color: #8b2252;">"len"</span>)
+head(data_melted)
+</pre>
+
+
+<pre class="example">
+  supp dose pig variable value
+1   VC  0.5   1      len   4.2
+2   VC  0.5   2      len  11.5
+3   VC  0.5   3      len   7.3
+4   VC  0.5   4      len   5.8
+5   VC  0.5   5      len   6.4
+6   VC  0.5   6      len  10.0
+</pre>
+
+
+<p>
+Now we want to cast the data. We run <code>cast()</code> supplying the melted
+<code>data.frame</code> <code>data_melted</code>. We want subject's listed in each row of a
+single column, so =pig- will be added the the left-hand side of the
+cast equation. We want each combination of supplement and dose in a
+separate column going across the top of our dataset, so =supp + dose+
+will be supplied to the right side of the cast function. Finally, we
+want <code>cast()</code> to calculate the mean <code>len</code> in each condition, so we
+specify the function <code>mean</code>. The melted <code>data.frame</code> already knows
+what value we're interested in, because it kept track of the measure
+variable. If we had supplied multiple measure variables, <code>cast()</code>
+would give us means for each combination of conditions for each
+measure variable (we would wind up with a really wide dataset).
+</p>
+
+
+
+<pre class="src src-R">data_casted = cast(data_melted, pig ~ supp + dose, mean)
+data_casted
+</pre>
+
+
+
+<pre class="example">   pig OJ_0.5 OJ_1 OJ_2 VC_0.5 VC_1 VC_2
+1    1   15.2   20   26    4.2   16   24
+2    2   21.5   23   26   11.5   16   18
+3    3   17.6   24   22    7.3   15   34
+4    4    9.7   26   24    5.8   17   26
+5    5   14.5   20   25    6.4   22   26
+6    6   10.0   25   31   10.0   17   32
+7    7    8.2   26   26   11.2   14   27
+8    8    9.4   21   27   11.2   14   22
+9    9   16.5   14   29    5.2   19   23
+10  10    9.7   27   23    7.0   16   30
+</pre>
+
+
+<p>
+Finally, we will write this casted dataset as a <code>csv</code> file, so it can
+be imported to SPSS.
+</p>
+
+
+<pre class="src src-R">write.csv(data_casted,<span style="color: #8b2252;">"pig_cast.csv"</span>)
+</pre>
+
+
+
+</div>
+
+</div>
+
+<div id="outline-container-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Repeated measures in R, truly <code>ez</code>.</h2>
+<div class="outline-text-2" id="text-4">
+
+<p>We'll analyze the pig data in R as well using the <code>ezANOVA()</code> function
+from the <code>ez</code> package. First we'll install <code>ez</code> and the load the package.
+</p>
+
+
+
+<pre class="src src-R">install.packages(<span style="color: #8b2252;">"ez"</span>)
+<span style="color: #008b8b;">library</span>(ez)
+</pre>
+
+
+<p>
+Notice that R installed or checked to see if you have already
+installed a whole bunch of dependent packages, including <code>plyr</code> and
+<code>reshape</code>. The reason these are installed is because <code>ezANOVA()</code> will
+actually aggregate your data for you, meaning you can give it
+trial-level data and it will calculate the cell means similar to how
+we calculated them for SPSS. So much =ez=ier!
+</p>
+<p>
+The format of an <code>ezANOVA()</code> call is as follows
+</p>
+
+
+<pre class="src src-R"><span style="color: #b22222;"># </span><span style="color: #b22222;">ezANOVA(data ,          #your dataset</span>
+<span style="color: #b22222;">#        </span><span style="color: #b22222;">dv=,             #your dependent measure</span>
+<span style="color: #b22222;">#        </span><span style="color: #b22222;">wid =,           #your subject/item id column</span>
+<span style="color: #b22222;">#        </span><span style="color: #b22222;">within =  .( ),  #within subject/item factors</span>
+<span style="color: #b22222;">#        </span><span style="color: #b22222;">between = .( ),  #between subject/item factors</span>
+<span style="color: #b22222;">#       </span><span style="color: #b22222;">)</span>
+</pre>
+
+
+<p>
+Here we have a dependent measure (<code>len</code>), two within-pig variables
+(<code>supp</code> and <code>dose</code>), and a pig-identifier (<code>wid</code>). So we construct the
+command accordingly.
+</p>
+
+
+<pre class="src src-R">ezANOVA(data = data, wid=pig, dv=len, within= .(supp, dose))
+</pre>
+
+
+
+<pre class="example">Warning: Converting "pig" to factor for ANOVA.
+$ANOVA
+     Effect DFn DFd     F       p p&lt;.05  ges
+2      supp   1   9  34.9 2.3e-04     * 0.22
+3      dose   2  18 106.5 1.1e-10     * 0.77
+4 supp:dose   2  18   2.5 1.1e-01       0.13
+
+$`Mauchly's Test for Sphericity`
+     Effect    W    p p&lt;.05
+3      dose 0.81 0.42      
+4 supp:dose 0.93 0.76      
+
+$`Sphericity Corrections`
+     Effect  GGe   p[GG] p[GG]&lt;.05 HFe   p[HF] p[HF]&lt;.05
+3      dose 0.84 2.8e-09         * 1.0 1.1e-10         *
+4 supp:dose 0.94 1.1e-01           1.2 1.1e-01
+</pre>
+
+
+<p>
+Finally we can compute summary statistics using <code>ddply()</code>.
+</p>
+
+
+<pre class="src src-R">data.summary = ddply(data, .(supp, dose), summarise, meanLen = mean(len))
+data.summary
+</pre>
+
+
+<pre class="example">
+  supp dose meanLen
+1   OJ  0.5      13
+2   OJ    1      23
+3   OJ    2      26
+4   VC  0.5       8
+5   VC    1      17
+6   VC    2      26
+</pre>
+
+
+<p>
+We could also get a slightly prettier table using <code>reshape</code>.
+</p>
+
+
+
+<pre class="src src-R">data.melted.summary <span style="color: #008b8b;">&lt;-</span> melt(data, measure.vars=<span style="color: #8b2252;">"len"</span>)
+data.summary.reshape = cast(data.melted.summary, supp ~ dose, mean)
+data.summary.reshape
+</pre>
+
+
+<pre class="example">
+  supp 0.5  1  2
+1   OJ  13 23 26
+2   VC   8 17 26
+</pre>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> Final Script</h2>
+<div class="outline-text-2" id="text-5">
+
+<p><a href="./Script Files/ezToothData.R">Final script available here as R file</a>.
+</p>
+
+
+
+<pre class="src src-R"><span style="color: #008b8b;">library</span>(ez)
+<span style="color: #008b8b;">library</span>(reshape)
+<span style="color: #008b8b;">library</span>(plyr)
+
+data(ToothGrowth) <span style="color: #b22222;">#</span><span style="color: #b22222;">put a data.frame ToothGrowth on the workspace</span>
+
+data = ToothGrowth <span style="color: #b22222;">#</span><span style="color: #b22222;">copy the dataset to data</span>
+
+data$pig = rep(seq(1,10),6) <span style="color: #b22222;">#</span><span style="color: #b22222;">add a column to track subject number</span>
+data$dose <span style="color: #008b8b;">&lt;-</span> as.factor(data$dose) <span style="color: #b22222;">#</span><span style="color: #b22222;">factor dose</span>
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">Exporting to SPSS</span>
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">Melt the data specifying len as the measure.vars</span>
+   data_melted = melt(data, measure.vars=<span style="color: #8b2252;">"len"</span>)
+
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">Cast the data to SPSS repeated measures format</span>
+   data_casted = cast(data_melted, pig ~ supp + dose, mean)
+
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">Write out the data to csv</span>
+   write.csv(data_casted,<span style="color: #8b2252;">"pig_cast.csv"</span>)
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">Run ezANOVA with R</span>
+
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">The general format</span>
+   <span style="color: #b22222;"># </span><span style="color: #b22222;">ezANOVA(data ,          #your dataset</span>
+   <span style="color: #b22222;">#        </span><span style="color: #b22222;">dv=,             #your dependent measure</span>
+   <span style="color: #b22222;">#        </span><span style="color: #b22222;">wid =,           #your subject/item id column</span>
+   <span style="color: #b22222;">#        </span><span style="color: #b22222;">within =  .( ),  #within subject/item factors</span>
+   <span style="color: #b22222;">#        </span><span style="color: #b22222;">between = .( ),  #between subject/item factors</span>
+   <span style="color: #b22222;">#       </span><span style="color: #b22222;">)</span>
+
+   ezANOVA(data = data, wid=pig, dv=len, within= .(supp, dose))
+
+<span style="color: #b22222;">## </span><span style="color: #b22222;">Summary tables</span>
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">Using ddply, kind of ugly for reading</span>
+   data.summary = ddply(data, .(supp, dose), summarise, meanLen = mean(len))
+
+   <span style="color: #b22222;">#</span><span style="color: #b22222;">Using reshape allows us more control of the format</span>
+   data.melted.summary <span style="color: #008b8b;">&lt;-</span> melt(data, measure.vars=<span style="color: #8b2252;">"len"</span>)
+   data.summary.reshape = cast(data.melted.summary, supp ~ dose, mean)
+</pre>
+
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2013-05-20 22:00:29 EDT</p>
+<p class="author">Author: Cari Bogulski, Jason Gullifer</p>
+<p class="creator">Org version 7.8.11 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

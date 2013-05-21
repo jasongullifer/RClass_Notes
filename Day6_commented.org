@@ -1,0 +1,272 @@
+#+TITLE: Day 6 - Commented History from Class
+#+AUTHOR: Cari Bogulski, Jason Gullifer
+#+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
+#+PROPERTY: results output
+#+PROPERTY: session *R*
+#+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
+
+Today we learned about conducting ANOVA in R, and we practiced the
+=ToothGrowth= dataset, available under the base installation of
+R. =ToothGrowth= investigates the effect of Vitamin C on tooth growth in
+Guinea Pigs. Ten Pigs were dosed with Vitamin C either through orange
+juice or asorbic acid. There were three dosage levels, .5 mg, 1 mg,
+and 2 mg. 
+
+To analyze =ToothGrowth=, we first conducted some data manipulation so
+we could export the results in a format for conducting repeated
+measures in SPSS. Then we ran the same test in R using the =ez=
+package.
+
+* Obtaining =ToothGrowth=
+
+The dataset is available on any R installation. It can be imported
+into the worskpace with the =data()= function. We then chose to give it
+the name =data=.
+
+#+begin_src R
+data(ToothGrowth) #put a data.frame ToothGrowth on the workspace
+
+data = ToothGrowth #copy the dataset to data
+head(data)
+#+end_src
+
+#+RESULTS:
+:    len supp dose
+: 1  4.2   VC  0.5
+: 2 11.5   VC  0.5
+: 3  7.3   VC  0.5
+: 4  5.8   VC  0.5
+: 5  6.4   VC  0.5
+: 6 10.0   VC  0.5
+
+* Preliminaries
+The =ToothGrowth= data is a bit opaquely labeled. We can check what
+each column corresponds to with the =?= command. We'll have to use =?=
+on the original dataset =ToothGrowth= not our =data= in order to get
+the help.
+
+#+begin_src R
+?ToothGrowth
+#+end_src
+
+After reading the help, we find out that these data are from a
+repeated measures experiment. However, there is no column that
+specifically indicates the subject number (or pig number). Let's add
+one. For this we need to create a column of the numbers 1-10 that
+repeats 6 times, one for each pig in each dose level of each
+supplement. The =seq()= command will give us a sequence, e.g. of
+1-10. The =rep()= command can be used to repeat something a given
+number of times, e.g. 6.
+
+We should also turn =dose= into a factor; it's presently numeric. 
+
+#+begin_src R
+data$pig = rep(seq(1,10),6)
+data$dose <- as.factor(data$dose)
+head(data)
+#+end_src
+
+#+RESULTS:
+:    len supp dose pig
+: 1  4.2   VC  0.5   1
+: 2 11.5   VC  0.5   2
+: 3  7.3   VC  0.5   3
+: 4  5.8   VC  0.5   4
+: 5  6.4   VC  0.5   5
+: 6 10.0   VC  0.5   6
+
+
+* Aggregating to SPSS's repeated measures format: =melt()= and =cast()=
+Remember that users of SPSS will want to have one row per participant,
+which different measures (i.e., mixtures of conditions) going across
+the top in separate columns.
+
+To do this we use the melt command. We want to =melt= data treating
+=len= (the length of the tooth) as a measure variable. We just as well
+could have given =c("supp","dose","pig")= as id variables, but that
+results in more typing. =melt()= will assume that anything you didn't
+specify as a measure variable is a id variable. Similarly, =melt()=
+will assume that if you specify only id variables, anything you didn't
+specify as an id variable will be a measure variable.
+
+#+begin_src R
+data_melted = melt(data, measure.vars="len")
+head(data_melted)
+#+end_src
+
+#+RESULTS:
+:   supp dose pig variable value
+: 1   VC  0.5   1      len   4.2
+: 2   VC  0.5   2      len  11.5
+: 3   VC  0.5   3      len   7.3
+: 4   VC  0.5   4      len   5.8
+: 5   VC  0.5   5      len   6.4
+: 6   VC  0.5   6      len  10.0
+
+Now we want to cast the data. We run =cast()= supplying the melted
+=data.frame= =data_melted=. We want subject's listed in each row of a
+single column, so =pig- will be added the the left-hand side of the
+cast equation. We want each combination of supplement and dose in a
+separate column going across the top of our dataset, so =supp + dose+
+will be supplied to the right side of the cast function. Finally, we
+want =cast()= to calculate the mean =len= in each condition, so we
+specify the function =mean=. The melted =data.frame= already knows
+what value we're interested in, because it kept track of the measure
+variable. If we had supplied multiple measure variables, =cast()=
+would give us means for each combination of conditions for each
+measure variable (we would wind up with a really wide dataset).
+
+#+begin_src R
+data_casted = cast(data_melted, pig ~ supp + dose, mean)
+data_casted
+#+end_src
+
+#+RESULTS:
+#+begin_example
+   pig OJ_0.5 OJ_1 OJ_2 VC_0.5 VC_1 VC_2
+1    1   15.2   20   26    4.2   16   24
+2    2   21.5   23   26   11.5   16   18
+3    3   17.6   24   22    7.3   15   34
+4    4    9.7   26   24    5.8   17   26
+5    5   14.5   20   25    6.4   22   26
+6    6   10.0   25   31   10.0   17   32
+7    7    8.2   26   26   11.2   14   27
+8    8    9.4   21   27   11.2   14   22
+9    9   16.5   14   29    5.2   19   23
+10  10    9.7   27   23    7.0   16   30
+#+end_example
+
+Finally, we will write this casted dataset as a =csv= file, so it can
+be imported to SPSS.
+#+begin_src R
+write.csv(data_casted,"pig_cast.csv")
+#+end_src
+
+
+* Repeated measures in R, truly =ez=.
+We'll analyze the pig data in R as well using the =ezANOVA()= function
+from the =ez= package. First we'll install =ez= and the load the package.
+
+#+begin_src R
+install.packages("ez")
+library(ez)
+#+end_src
+
+Notice that R installed or checked to see if you have already
+installed a whole bunch of dependent packages, including =plyr= and
+=reshape=. The reason these are installed is because =ezANOVA()= will
+actually aggregate your data for you, meaning you can give it
+trial-level data and it will calculate the cell means similar to how
+we calculated them for SPSS. So much =ez=ier!
+
+The format of an =ezANOVA()= call is as follows
+#+begin_src R
+# ezANOVA(data ,          #your dataset
+#        dv=,             #your dependent measure
+#        wid =,           #your subject/item id column
+#        within =  .( ),  #within subject/item factors
+#        between = .( ),  #between subject/item factors
+#       )
+#+end_src
+
+Here we have a dependent measure (=len=), two within-pig variables
+(=supp= and =dose=), and a pig-identifier (=wid=). So we construct the
+command accordingly.
+#+begin_src R
+ezANOVA(data = data, wid=pig, dv=len, within= .(supp, dose))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Warning: Converting "pig" to factor for ANOVA.
+$ANOVA
+     Effect DFn DFd     F       p p<.05  ges
+2      supp   1   9  34.9 2.3e-04     * 0.22
+3      dose   2  18 106.5 1.1e-10     * 0.77
+4 supp:dose   2  18   2.5 1.1e-01       0.13
+
+$`Mauchly's Test for Sphericity`
+     Effect    W    p p<.05
+3      dose 0.81 0.42      
+4 supp:dose 0.93 0.76      
+
+$`Sphericity Corrections`
+     Effect  GGe   p[GG] p[GG]<.05 HFe   p[HF] p[HF]<.05
+3      dose 0.84 2.8e-09         * 1.0 1.1e-10         *
+4 supp:dose 0.94 1.1e-01           1.2 1.1e-01
+#+end_example
+
+Finally we can compute summary statistics using =ddply()=.
+#+begin_src R
+data.summary = ddply(data, .(supp, dose), summarise, meanLen = mean(len))
+data.summary
+#+end_src
+
+#+RESULTS:
+:   supp dose meanLen
+: 1   OJ  0.5      13
+: 2   OJ    1      23
+: 3   OJ    2      26
+: 4   VC  0.5       8
+: 5   VC    1      17
+: 6   VC    2      26
+
+We could also get a slightly prettier table using =reshape=.
+
+#+begin_src R
+data.melted.summary <- melt(data, measure.vars="len")
+data.summary.reshape = cast(data.melted.summary, supp ~ dose, mean)
+data.summary.reshape
+#+end_src
+
+#+RESULTS:
+:   supp 0.5  1  2
+: 1   OJ  13 23 26
+: 2   VC   8 17 26
+
+* Final Script
+[[./Script Files/ezToothData.R][Final script available here as R file]].
+
+#+begin_src R
+library(ez)
+library(reshape)
+library(plyr)
+
+data(ToothGrowth) #put a data.frame ToothGrowth on the workspace
+
+data = ToothGrowth #copy the dataset to data
+
+data$pig = rep(seq(1,10),6) #add a column to track subject number
+data$dose <- as.factor(data$dose) #factor dose
+
+## Exporting to SPSS
+   #Melt the data specifying len as the measure.vars
+   data_melted = melt(data, measure.vars="len")
+
+   #Cast the data to SPSS repeated measures format
+   data_casted = cast(data_melted, pig ~ supp + dose, mean)
+
+   #Write out the data to csv
+   write.csv(data_casted,"pig_cast.csv")
+
+## Run ezANOVA with R
+
+   #The general format
+   # ezANOVA(data ,          #your dataset
+   #        dv=,             #your dependent measure
+   #        wid =,           #your subject/item id column
+   #        within =  .( ),  #within subject/item factors
+   #        between = .( ),  #between subject/item factors
+   #       )
+
+   ezANOVA(data = data, wid=pig, dv=len, within= .(supp, dose))
+
+## Summary tables
+   #Using ddply, kind of ugly for reading
+   data.summary = ddply(data, .(supp, dose), summarise, meanLen = mean(len))
+   
+   #Using reshape allows us more control of the format
+   data.melted.summary <- melt(data, measure.vars="len")
+   data.summary.reshape = cast(data.melted.summary, supp ~ dose, mean)
+#+end_src
