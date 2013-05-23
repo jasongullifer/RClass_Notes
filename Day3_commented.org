@@ -453,7 +453,7 @@ monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accurac
 
 An equivalent way to do this.
 #+begin_src R
-monodata.noprac$Accuracy[monodata.noprac$Accuracy!=0 & monodata.noprac$Accuracy!=1)] <- 1
+monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <- 1
 #+end_src
 
 Check the =xtabs()= to see the difference. Now we have just 0 and 1. 
