@@ -442,7 +442,7 @@ recording of my RAs during their coding session, and saw that they
 turned some 1 trials into random things like 111 or 11.
 
 Therefore, we should turn any non-1 or non-0 trial into a 1. We can
-use our where brackets to do this. We any =Accuracy= data where the
+use our where brackets to do this. We need any =Accuracy= data where the
 accuracy is not a 0 or not a 1 to be replaced with a 1.
 
 #+begin_src R
