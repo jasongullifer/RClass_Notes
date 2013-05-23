@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-lang="en" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>Day 3 - Commented History from Class</title>
-<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="title" content="Day 3 - Commented History from Class"/>
 <meta name="generator" content="Org-mode"/>
-<meta name="generated" content="2013-05-20 11:32:03 "/>
+<meta name="generated" content="2013-05-23 17:43:27 EDT"/>
 <meta name="author" content="Cari Bogulski, Jason Gullifer"/>
 <meta name="description" content=""/>
 <meta name="keywords" content=""/>
@@ -21,6 +21,9 @@ lang="en" xml:lang="en">
   .target { }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
   p.verse { margin-left: 3% }
   pre {
 	border: 1pt solid #AEBDCC;
@@ -31,10 +34,23 @@ lang="en" xml:lang="en">
         overflow:auto;
   }
   table { border-collapse: collapse; }
-  td, th { vertical-align: top; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
   dt { font-weight: bold; }
   div.figure { padding: 0.5em; }
   div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
   .linenr { font-size:smaller }
   .code-highlighted {background-color:#ffff00;}
   .org-info-js_info-navigation { border-style:none; }
@@ -67,10 +83,15 @@ lang="en" xml:lang="en">
  }
 /*]]>*///-->
 </script>
+
 </head>
 <body>
-<div id="content">
 
+<div id="preamble">
+
+</div>
+
+<div id="content">
 <h1 class="title">Day 3 - Commented History from Class</h1>
 
 
@@ -79,20 +100,20 @@ lang="en" xml:lang="en">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1 A bit more on working with a <code>data.frame</code> </a></li>
-<li><a href="#sec-2">2 Working with Jason's English Monolingual Naming Data: <code>monodata</code> </a>
+<li><a href="#sec-1">1 A bit more on working with a <code>data.frame</code></a></li>
+<li><a href="#sec-2">2 Working with Jason's English Monolingual Naming Data: <code>monodata</code></a>
 <ul>
-<li><a href="#sec-2.1">2.1 About the dataset </a></li>
-<li><a href="#sec-2.2">2.2 Preliminaries: Reading data and checking coherence of data </a></li>
-<li><a href="#sec-2.3">2.3 Removing practice trials </a></li>
-<li><a href="#sec-2.4">2.4 Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>) </a>
+<li><a href="#sec-2-1">2.1 About the dataset</a></li>
+<li><a href="#sec-2-2">2.2 Preliminaries: Reading data and checking coherence of data</a></li>
+<li><a href="#sec-2-3">2.3 Removing practice trials</a></li>
+<li><a href="#sec-2-4">2.4 Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>)</a>
 <ul>
-<li><a href="#sec-2.4.1">2.4.1 Factoring <code>Subject</code> </a></li>
-<li><a href="#sec-2.4.2">2.4.2 Fixing <code>Accuracy</code> and factoring it </a></li>
+<li><a href="#sec-2-4-1">2.4.1 Factoring <code>Subject</code></a></li>
+<li><a href="#sec-2-4-2">2.4.2 Fixing <code>Accuracy</code> and factoring it</a></li>
 </ul>
 </li>
-<li><a href="#sec-2.5">2.5 Data aggregation: <code>tapply()</code> </a></li>
-<li><a href="#sec-2.6">2.6 The final script for today </a></li>
+<li><a href="#sec-2-5">2.5 Data aggregation: <code>tapply()</code></a></li>
+<li><a href="#sec-2-6">2.6 The final script for today</a></li>
 </ul>
 </li>
 </ul>
@@ -100,7 +121,7 @@ lang="en" xml:lang="en">
 </div>
 
 <div id="outline-container-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> A bit more on working with a <code>data.frame</code> </h2>
+<h2 id="sec-1"><span class="section-number-2">1</span> A bit more on working with a <code>data.frame</code></h2>
 <div class="outline-text-2" id="text-1">
 
 
@@ -113,15 +134,13 @@ second element of the vector.
 </p>
 
 
-<pre class="example">disney = read.csv("./Cooked Data Sets/Disney Vices Data.csv")
+<pre class="src src-R">disney = read.csv(<span style="color: #8b2252;">"./Cooked Data Sets/Disney Vices Data.csv"</span>)
 head(disney)
 dimensions = dim(disney)
 
 dimensions[1]
 dimensions[2]
 </pre>
-
-
 
 
 <pre class="example">
@@ -142,10 +161,8 @@ Don't trust length for a <code>data.frame</code>.
 </p>
 
 
-<pre class="example">length(disney)
+<pre class="src src-R">length(disney)
 </pre>
-
-
 
 
 <pre class="example">
@@ -160,11 +177,9 @@ columns if you don't want to use <code>dim()</code>
 
 
 
-<pre class="example">nrow(disney)
+<pre class="src src-R">nrow(disney)
 ncol(disney)
 </pre>
-
-
 
 
 <pre class="example">
@@ -179,15 +194,15 @@ ncol(disney)
 </div>
 
 <div id="outline-container-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> Working with Jason's English Monolingual Naming Data: <code>monodata</code> </h2>
+<h2 id="sec-2"><span class="section-number-2">2</span> Working with Jason's English Monolingual Naming Data: <code>monodata</code></h2>
 <div class="outline-text-2" id="text-2">
 
 
 </div>
 
-<div id="outline-container-2.1" class="outline-3">
-<h3 id="sec-2.1"><span class="section-number-3">2.1</span> About the dataset </h3>
-<div class="outline-text-3" id="text-2.1">
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> About the dataset</h3>
+<div class="outline-text-3" id="text-2-1">
 
 <p>In this dataset, 41 monolingual English speakers named 128 printed
 words aloud. The time to begin naming the word from the onset of the
@@ -223,9 +238,9 @@ calculation of mean RTs for cognates and non-cognates separately.
 
 </div>
 
-<div id="outline-container-2.2" class="outline-3">
-<h3 id="sec-2.2"><span class="section-number-3">2.2</span> Preliminaries: Reading data and checking coherence of data </h3>
-<div class="outline-text-3" id="text-2.2">
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Preliminaries: Reading data and checking coherence of data</h3>
+<div class="outline-text-3" id="text-2-2">
 
 
 <p>
@@ -238,12 +253,10 @@ This data looks good! We can also use head and check past the first 6 rows by sp
 </p>
 
 
-<pre class="example">monodata = read.csv("./Real Datasets/monolingual_naming.csv")
+<pre class="src src-R">monodata = read.csv(<span style="color: #8b2252;">"./Real Datasets/monolingual_naming.csv"</span>)
 head(monodata,20)
 dim(monodata)
 </pre>
-
-
 
 
 
@@ -335,8 +348,6 @@ dim(monodata)
 </pre>
 
 
-
-
 <p>
 We could also use the structure <code>str()</code> function to check all of our
 data types. We want to make sure that the numerics are numeric, the
@@ -345,10 +356,8 @@ factors are factors, etc.
 
 
 
-<pre class="example">str(monodata)
+<pre class="src src-R">str(monodata)
 </pre>
-
-
 
 
 
@@ -382,8 +391,6 @@ factors are factors, etc.
 </pre>
 
 
-
-
 <p>
 From looking at <code>str()</code> we see that <code>TargetWord.RT</code> column is
 appropriately numeric, and the <code>CognateStatus</code> column is appropriately a
@@ -399,24 +406,22 @@ to do in plain English, and then translate it into R.
 
 
 
-<pre class="example">#Remove practice trials. 
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Remove practice trials. </span>
 
-#Make Subject a factor
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Make Subject a factor</span>
 
-#Fix the Accuracy column and then make Accuracy a factor
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Fix the Accuracy column and then make Accuracy a factor</span>
 </pre>
 
 
 
-
-
 </div>
 
 </div>
 
-<div id="outline-container-2.3" class="outline-3">
-<h3 id="sec-2.3"><span class="section-number-3">2.3</span> Removing practice trials </h3>
-<div class="outline-text-3" id="text-2.3">
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Removing practice trials</h3>
+<div class="outline-text-3" id="text-2-3">
 
 <p>Let's work on removing practice trials. Cari suggests running a
 cross-tabs (<code>xtabs()</code>), to check the number of practice trials you
@@ -425,10 +430,8 @@ have, so then you can know when they've been removed.
 
 
 
-<pre class="example">xtabs(~monodata$Procedure.Block.)
+<pre class="src src-R">xtabs(~monodata$Procedure.Block.)
 </pre>
-
-
 
 
 <pre class="example">
@@ -445,12 +448,10 @@ where the <code>Procedure.Block.</code> column is not equal to <code>PracBlockPr
 </p>
 
 
-<pre class="example">#Remove practice trials. 
-monodata.noprac = monodata[monodata$Procedure.Block. != "PracBlockProc",]
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Remove practice trials. </span>
+monodata.noprac = monodata[monodata$Procedure.Block. != <span style="color: #8b2252;">"PracBlockProc"</span>,]
 head(monodata.noprac,20)
 </pre>
-
-
 
 
 
@@ -541,17 +542,13 @@ head(monodata.noprac,20)
 </pre>
 
 
-
-
 <p>
 Now check the <code>xtabs()</code> again to make sure that they've actually been removed.
 </p>
 
 
-<pre class="example">xtabs(~monodata.noprac$Procedure.Block.)
+<pre class="src src-R">xtabs(~monodata.noprac$Procedure.Block.)
 </pre>
-
-
 
 
 <pre class="example">
@@ -587,10 +584,8 @@ have 0 trials associated with them?
 </p>
 
 
-<pre class="example">with(monodata.noprac,xtabs(~CognateStatus+Procedure.Block.))
+<pre class="src src-R">with(monodata.noprac,xtabs(~CognateStatus+Procedure.Block.))
 </pre>
-
-
 
 
 <pre class="example">
@@ -607,12 +602,10 @@ Let's drop those levels! Then check <code>xtabs()</code> to see the difference.
 </p>
 
 
-<pre class="example">monodata.noprac$CognateStatus &lt;- droplevels(monodata.noprac$CognateStatus)
-monodata.noprac$Procedure.Block. &lt;- droplevels(monodata.noprac$Procedure.Block.)
+<pre class="src src-R">monodata.noprac$CognateStatus <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$CognateStatus)
+monodata.noprac$Procedure.Block. <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$Procedure.Block.)
 with(monodata.noprac,xtabs(~CognateStatus+Procedure.Block.))
 </pre>
-
-
 
 
 <pre class="example">
@@ -627,29 +620,27 @@ CognateStatus BlockProc BlockProc2
 
 </div>
 
-<div id="outline-container-2.4" class="outline-3">
-<h3 id="sec-2.4"><span class="section-number-3">2.4</span> Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>) </h3>
-<div class="outline-text-3" id="text-2.4">
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Factoring columns that need to be factored (<code>Subject</code> and <code>Accuracy</code>)</h3>
+<div class="outline-text-3" id="text-2-4">
 
 
 
 </div>
 
-<div id="outline-container-2.4.1" class="outline-4">
-<h4 id="sec-2.4.1"><span class="section-number-4">2.4.1</span> Factoring <code>Subject</code> </h4>
-<div class="outline-text-4" id="text-2.4.1">
+<div id="outline-container-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Factoring <code>Subject</code></h4>
+<div class="outline-text-4" id="text-2-4-1">
 
 <p>Now let's factor the <code>Subject</code> column, like we said we would initially. We can use <code>str()</code> before and after to see the changes.
 </p>
 
 
-<pre class="example">#Make Subject a factor
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Make Subject a factor</span>
 str(monodata.noprac$Subject)
-monodata.noprac$Subject &lt;- as.factor(monodata.noprac$Subject)
+monodata.noprac$Subject <span style="color: #008b8b;">&lt;-</span> as.factor(monodata.noprac$Subject)
 str(monodata.noprac$Subject)
 </pre>
-
-
 
 
 <pre class="example">
@@ -662,19 +653,17 @@ str(monodata.noprac$Subject)
 
 </div>
 
-<div id="outline-container-2.4.2" class="outline-4">
-<h4 id="sec-2.4.2"><span class="section-number-4">2.4.2</span> Fixing <code>Accuracy</code> and factoring it </h4>
-<div class="outline-text-4" id="text-2.4.2">
+<div id="outline-container-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Fixing <code>Accuracy</code> and factoring it</h4>
+<div class="outline-text-4" id="text-2-4-2">
 
 <p>Now we can fix the RA mistakes, and factor the Accuracy column. What
 mistakes were made? Let's use <code>xtabs()</code> to check it out!
 </p>
 
 
-<pre class="example">xtabs(~monodata.noprac$Accuracy)
+<pre class="src src-R">xtabs(~monodata.noprac$Accuracy)
 </pre>
-
-
 
 
 <pre class="example">
@@ -692,16 +681,14 @@ turned some 1 trials into random things like 111 or 11.
 </p>
 <p>
 Therefore, we should turn any non-1 or non-0 trial into a 1. We can
-use our where brackets to do this. We any <code>Accuracy</code> data where the
+use our where brackets to do this. We need any <code>Accuracy</code> data where the
 accuracy is not a 0 or not a 1 to be replaced with a 1.
 </p>
 
 
 
-<pre class="example">monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] &lt;- 1
+<pre class="src src-R">monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <span style="color: #008b8b;">&lt;-</span> 1
 </pre>
-
-
 
 
 
@@ -710,10 +697,8 @@ An equivalent way to do this.
 </p>
 
 
-<pre class="example">monodata.noprac$Accuracy[monodata.noprac$Accuracy!=0 &amp; monodata.noprac$Accuracy!=1)] &lt;- 1
+<pre class="src src-R">monodata.noprac$Accuracy[monodata.noprac$Accuracy!=0 | monodata.noprac$Accuracy!=1] <span style="color: #008b8b;">&lt;-</span> 1
 </pre>
-
-
 
 
 <p>
@@ -721,10 +706,8 @@ Check the <code>xtabs()</code> to see the difference. Now we have just 0 and 1.
 </p>
 
 
-<pre class="example">xtabs(~monodata.noprac$Accuracy)
+<pre class="src src-R">xtabs(~monodata.noprac$Accuracy)
 </pre>
-
-
 
 
 <pre class="example">
@@ -746,16 +729,14 @@ humans. Any 0 will get the level "incorrect" and any 1 will get
 
 
 
-<pre class="example">#Factor our accuracy data
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Factor our accuracy data</span>
 monodata.noprac$originalacc = monodata.noprac$Accuracy
 monodata.noprac$Accuracy = as.factor(monodata.noprac$Accuracy)
 str(monodata.noprac$originalacc)
 str(monodata.noprac$Accuracy)
-levels(monodata.noprac$Accuracy) = c("incorrect","correct")
+levels(monodata.noprac$Accuracy) = c(<span style="color: #8b2252;">"incorrect"</span>,<span style="color: #8b2252;">"correct"</span>)
 xtabs(~monodata.noprac$Accuracy)
 </pre>
-
-
 
 
 <pre class="example">
@@ -772,9 +753,9 @@ incorrect   correct
 
 </div>
 
-<div id="outline-container-2.5" class="outline-3">
-<h3 id="sec-2.5"><span class="section-number-3">2.5</span> Data aggregation: <code>tapply()</code> </h3>
-<div class="outline-text-3" id="text-2.5">
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Data aggregation: <code>tapply()</code></h3>
+<div class="outline-text-3" id="text-2-5">
 
 <p>Now that we have our data relatively clean of incorrect trials and
 practice trials, let's try our hands at data aggregation using the
@@ -806,13 +787,11 @@ only contains correct trials.
 
 
 
-<pre class="example">monodata.correct &lt;- monodata.noprac[monodata.noprac$Accuracy=="correct",]
-data.applied &lt;- tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
-data.applied &lt;- as.data.frame(data.applied)
+<pre class="src src-R">monodata.correct <span style="color: #008b8b;">&lt;-</span> monodata.noprac[monodata.noprac$Accuracy==<span style="color: #8b2252;">"correct"</span>,]
+data.applied <span style="color: #008b8b;">&lt;-</span> tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
+data.applied <span style="color: #008b8b;">&lt;-</span> as.data.frame(data.applied)
 data.applied
 </pre>
-
-
 
 
 
@@ -861,8 +840,6 @@ data.applied
 </pre>
 
 
-
-
 <p>
 <code>tapply()</code> is a bit funky. Our subject numbers were stored as
 <code>row.names</code>. Let's store them instead to a column, so we can reference
@@ -872,12 +849,10 @@ explicitly include that RT was the measurement of interest.
 
 
 
-<pre class="example">data.applied$Subject &lt;- rownames(data.applied)
-colnames(data.applied)&lt;-c("Cog.RT","NCog.RT","Subject")
+<pre class="src src-R">data.applied$Subject <span style="color: #008b8b;">&lt;-</span> rownames(data.applied)
+colnames(data.applied)<span style="color: #008b8b;">&lt;-</span>c(<span style="color: #8b2252;">"Cog.RT"</span>,<span style="color: #8b2252;">"NCog.RT"</span>,<span style="color: #8b2252;">"Subject"</span>)
 data.applied
 </pre>
-
-
 
 
 
@@ -926,8 +901,6 @@ data.applied
 </pre>
 
 
-
-
 <p>
 Alright, that seems good for today! Tomorrow we'll learn more about data aggregation, including a black-magic function that we like better than <code>tapply()</code>
 </p>
@@ -935,49 +908,47 @@ Alright, that seems good for today! Tomorrow we'll learn more about data aggrega
 
 </div>
 
-<div id="outline-container-2.6" class="outline-3">
-<h3 id="sec-2.6"><span class="section-number-3">2.6</span> The final script for today </h3>
-<div class="outline-text-3" id="text-2.6">
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> The final script for today</h3>
+<div class="outline-text-3" id="text-2-6">
 
 <p>The final script looks something like this:
 </p>
 
 
 
-<pre class="example">#Read Jason's data
-monodata = read.csv("./Real Datasets/monolingual_naming.csv")
+<pre class="src src-R"><span style="color: #b22222;">#</span><span style="color: #b22222;">Read Jason's data</span>
+monodata = read.csv(<span style="color: #8b2252;">"./Real Datasets/monolingual_naming.csv"</span>)
 
-#remove practice from data
-monodata.noprac = monodata[monodata$Procedure.Block. != "PracBlockProc",]
+<span style="color: #b22222;">#</span><span style="color: #b22222;">remove practice from data</span>
+monodata.noprac = monodata[monodata$Procedure.Block. != <span style="color: #8b2252;">"PracBlockProc"</span>,]
 
-#Remove none from cognate status, and remove practice level from Procedure.Block.
-monodata.noprac$CognateStatus &lt;- droplevels(monodata.noprac$CognateStatus)
-monodata.noprac$Procedure.Block. &lt;- droplevels(monodata.noprac$Procedure.Block.)
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Remove none from cognate status, and remove practice level from Procedure.Block.</span>
+monodata.noprac$CognateStatus <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$CognateStatus)
+monodata.noprac$Procedure.Block. <span style="color: #008b8b;">&lt;-</span> droplevels(monodata.noprac$Procedure.Block.)
 
-#make subject a factor
-monodata.noprac$Subject &lt;- as.factor(monodata.noprac$Subject)
+<span style="color: #b22222;">#</span><span style="color: #b22222;">make subject a factor</span>
+monodata.noprac$Subject <span style="color: #008b8b;">&lt;-</span> as.factor(monodata.noprac$Subject)
 
-#make accuracy a factor
-monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] &lt;- 1
+<span style="color: #b22222;">#</span><span style="color: #b22222;">make accuracy a factor</span>
+monodata.noprac$Accuracy[!(monodata.noprac$Accuracy==0 | monodata.noprac$Accuracy==1)] <span style="color: #008b8b;">&lt;-</span> 1
 
-#Preserve original accuracy data as numeric
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Preserve original accuracy data as numeric</span>
 monodata.noprac$originalacc = monodata.noprac$Accuracy
 
-#Make Accuracy column a factor
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Make Accuracy column a factor</span>
 monodata.noprac$Accuracy = as.factor(monodata.noprac$Accuracy)
-levels(monodata.noprac$Accuracy) = c("incorrect","correct")
+levels(monodata.noprac$Accuracy) = c(<span style="color: #8b2252;">"incorrect"</span>,<span style="color: #8b2252;">"correct"</span>)
 
-#Aggregate our data using tapply(). Make sure to only include correct trials.
-monodata.correct &lt;- monodata.noprac[monodata.noprac$Accuracy=="correct",]
+<span style="color: #b22222;">#</span><span style="color: #b22222;">Aggregate our data using tapply(). Make sure to only include correct trials.</span>
+monodata.correct <span style="color: #008b8b;">&lt;-</span> monodata.noprac[monodata.noprac$Accuracy==<span style="color: #8b2252;">"correct"</span>,]
 
-data.applied &lt;- tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
-data.applied &lt;- as.data.frame(data.applied)
+data.applied <span style="color: #008b8b;">&lt;-</span> tapply(monodata.correct$TargetWord.RT, list(monodata.correct$Subject,monodata.correct$CognateStatus),mean)
+data.applied <span style="color: #008b8b;">&lt;-</span> as.data.frame(data.applied)
 
-data.applied$Subject &lt;- rownames(data.applied)
-colnames(data.applied)&lt;-c("Cog.RT","NCog.RT","Subject")
+data.applied$Subject <span style="color: #008b8b;">&lt;-</span> rownames(data.applied)
+colnames(data.applied)<span style="color: #008b8b;">&lt;-</span>c(<span style="color: #8b2252;">"Cog.RT"</span>,<span style="color: #8b2252;">"NCog.RT"</span>,<span style="color: #8b2252;">"Subject"</span>)
 </pre>
-
-
 
 
 
@@ -989,14 +960,14 @@ Tomorrow we'll look at aggregating this data using <code>tapply()</code> and <co
 </div>
 </div>
 </div>
-<div id="postamble">
-<p class="author"> Author: Cari Bogulski, Jason Gullifer
-<a href="mailto:cari.bogulski@gmail.com">&lt;cari.bogulski@gmail.com&gt;</a>
-<a href="mailto:jason.gullifer@gmail.com">&lt;jason.gullifer@gmail.com&gt;</a>
-</p>
-<p class="date"> Date: 2013-05-20 11:32:03 </p>
-<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
 </div>
+
+<div id="postamble">
+<p class="date">Date: 2013-05-23 17:43:27 EDT</p>
+<p class="author">Author: Cari Bogulski, Jason Gullifer</p>
+<p class="creator">Org version 7.8.11 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
 </div>
 </body>
 </html>
