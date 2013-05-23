@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Day 8 - Commented History from Class</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2013-05-22 23:59:19 "/>
+<meta name="author" content="Cari Bogulski, Jason Gullifer"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">Day 8 - Commented History from Class</h1>
+
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Final script from today </a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Final script from today </h2>
+<div class="outline-text-2" id="text-1">
+
+<p>Note: you will need the solution for Homework 4 (Simon Script) in
+order to fully run this ggplot script.
+</p>
+<p>
+<a href="./Script Files/ggplot-day8.R">Download R script here</a>
+</p>
+
+
+
+<pre class="example">#File I need in working directory to run
+#"Cari Simon Data.csv"
+#"hot_or_not_prepped.csv"
+#
+#install.packages("ggplot2")
+library(ggplot2)
+library(plyr)
+
+# Plotting the Hot or Not dataset  ----------------------------------------
+#Read in our prepped dataset
+data&lt;-read.csv("hot_or_not_prepped.csv")
+
+
+#Plot geom density; hint need to supply x
+
+#Might want to ply the data to get means per condition
+data.summarized &lt;- ddply(data,.(attractiveness, approach),
+                         summarise,
+                         meanTime = mean(time))
+
+#Set up the core ggplot command
+sumplot &lt;- ggplot(data.summarized, aes(x = attractiveness, #your x-axis variable (on the bottom)
+                                       y = meanTime, #your y-axis variable (left side)
+                                       fill = approach)) #other delineations... here fill color
+
+#Plot bars
+sumplot + geom_bar() #take out sumplot layer, and add to it a bar geometry
+
+#but we might want the bars not stacked, so we can dodge them
+sumplot + geom_bar(position = "dodge") #put bars side-by-side
+
+#could also use several other types of geoms, though perhaps bar is most useful.
+#we might want to do points, in this case we use group and color instead of 
+#fill. can add a line with geom_line(). so we change our base plot command.
+sumplot &lt;- ggplot(data.summarized, aes(x = attractiveness,
+                                       y = meanTime,
+                                       group = approach)) #similar to before, but here we group by approach
+
+sumplot + geom_point(position = "dodge")
+
+#alright, but hard to read. can't tell the approach. let's add some color to 
+#differentiate
+sumplot &lt;- ggplot(data.summarized, aes(x = attractiveness,
+                                       y = meanTime,
+                                       group = approach,
+                                       color = approach))#add in color by approach
+sumplot + geom_point(position = "dodge")
+
+#still a bit hard to read, let's add lines connecting the types of approach
+sumplot + geom_point(position = "dodge") + geom_line() #add line geometry to connect our "groups"
+
+#Great we can again see that for ugly people, approach matters, and less so for 
+#hot people
+
+#We actually don't even need to ply the data. ggplot includes
+#stat_summary(). Try with the bar. remember to switch to fill.
+myplot &lt;- ggplot(data, aes(x = attractiveness,
+                                       y = time,
+                                       fill = approach))
+
+myplot + stat_summary(fun.y = mean, #apply the function mean to our y... ggplot knows to consider our groups and x variables
+                      geom="bar",   #supply the bar geom here
+                      position="dodge") #also specify the position 
+
+#Try points again, now with group and color  again. Need to specify separate 
+#summaries for each one
+
+myplot &lt;- ggplot(data, aes(x = attractiveness,
+                                       y = time,
+                                       group = approach,
+                                       color = approach))
+
+myplot + stat_summary(fun.y = mean, geom = "line") +  #need to specify two stat_summaries, one for each geom
+  stat_summary(fun.y = mean, geom = "point") 
+
+
+myplot &lt;- ggplot(data, aes(x = attractiveness,
+                                      y = time,
+                                      group = approach,
+                                      color = approach))
+
+#We could add some confidence intervals
+myplot + stat_summary(fun.y = mean, geom = "line") +  #need to specify two stat_summaries, one for each geom
+  stat_summary(fun.y = mean, geom = "point") + stat_summary(fun.data = mean_cl_boot, geom = "pointrange")
+
+
+# Plotting Cari's Simon Data ----------------------------------------------
+
+#Clear our workspace
+rm(list=ls())
+
+#Load the simon Data
+data &lt;- read.csv("Cari Simon Data.csv")
+
+#Run the homework 4 solution script. Note, I removed install.packages()
+#commands. I also actually removed subject 1988.
+
+source("Homework_Set_4_solved.R")
+
+# We could look at our original dataset for the densityplot of RTs to see if our
+# cutoffs (250 and 3000 were correct). We might actually want to use a high
+# cutoff of like 1500.
+ggplot(data_unfiltered, aes(x=Stimulus.RT)) + geom_density()
+
+#Now we have all the simon data in our workspace. Let's now get only correct
+#trials for plotting
+data.correct&lt;-data[data$Stimulus.ACC=="correct",]
+#table(data.correct$Stimulus.ACC) #could check that it works
+
+#plot some boxplots of raw data
+simonplot &lt;- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency))
+simonplot + geom_boxplot()
+
+#Remember that we have multiple groups in our dataset, let's plot by group
+simonplot &lt;- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot()
+
+#Could break it down by subject to get a sense of each individual's data
+simonplot &lt;- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot() + facet_wrap(~Subject)
+
+#That was a little confusing for me. Maybe we can have our X be group and color
+#be congruency
+simonplot &lt;- ggplot(data.correct, aes(y=Stimulus.RT, colour=Congruency,x=Group))
+simonplot + geom_boxplot()
+
+#We might further split things up to have different panes, or facets for each group
+simonplot &lt;- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot() + facet_wrap(~Group)
+
+#Could also plot density plots by group and by congruency
+simonplot &lt;- ggplot(data.correct, aes(x=Stimulus.RT, fill = Group, colour=Group))
+simonplot + geom_density(alpha=.5) + facet_wrap(~Congruency)
+
+
+#Plotting raw data is fun, especially if you have numeric dependent variables 
+#because you can really start to visualize trends. However, here plot the 
+#summarized data. Remember that we could do this by hand with ddply and the
+#plot, or we could use stat summary.
+
+#Let's plot the dot and line chart like we did with hot or not (points are
+#usually preferred for representing RT data where bars are good for representing
+#count data)
+simonplot &lt;-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line")
+
+#Add some confidence intervals
+simonplot &lt;-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line") +
+  stat_summary(fun.data=mean_cl_normal,geom="pointrange")
+
+#Could wrap the plots instead
+simonplot &lt;-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line") +
+  stat_summary(fun.data=mean_cl_normal,geom="pointrange") + facet_wrap(~Group)
+
+</pre>
+
+
+
+</div>
+</div>
+<div id="postamble">
+<p class="author"> Author: Cari Bogulski, Jason Gullifer
+<a href="mailto:cari.bogulski@gmail.com">&lt;cari.bogulski@gmail.com&gt;</a>
+<a href="mailto:jason.gullifer@gmail.com">&lt;jason.gullifer@gmail.com&gt;</a>
+</p>
+<p class="date"> Date: 2013-05-22 23:59:19 </p>
+<p class="creator">HTML generated by org-mode 6.33x in emacs 23</p>
+</div>
+</div>
+</body>
+</html>

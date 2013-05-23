@@ -1,0 +1,41 @@
+#+TITLE: Day 7 - Commented History from Class
+#+AUTHOR: Cari Bogulski, Jason Gullifer
+#+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
+#+PROPERTY: results output
+#+PROPERTY: session *R*
+#+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
+
+* Pretend data to illustrate importance of calculating outliers by accuracy type
+
+data = read.csv("pretend.csv")
+
+data = ddply(data, .(Subject), transform, badcuthigh = mean(RT) + 2.5*sd(RT), badcutlow = mean(RT) - 2.5*sd(RT))
+
+data = ddply(data, .(Subject, Accuracy), transform, goodcuthigh = mean(RT) + 2.5*sd(RT), goodcutlow = mean(RT) - 2.5*sd(RT))
+
+data$outlier = 0
+
+data$outlier[data$Accuracy==1 & (data$RT>data$goodcuthigh | data$RT<data$goodcutlow)] = 1
+
+* Analyzing hot or not with ezANOVA and follow-up t-tests
+rm(list=ls())
+data = read.csv("hot_or_not.csv")
+View(data)
+colnames(data) = c("subject","attractiveness","approach","time")
+View(data)
+data$subject = as.factor(data$subject)
+data$attractiveness = as.factor(data$attractiveness)
+data$approach = as.factor(data$approach)
+levels(data$attractiveness) = c("hot", "ugly")
+levels(data$approach) = c("casual", "humor")
+data$attractiveness
+ezANOVA(data=data, wid=subject, dv=time, between=.(attractiveness, approach))
+summary = ddply(data, .(attractiveness,approach), summarise, mean_time = mean(RT))
+summary = ddply(data, .(attractiveness,approach), summarise, mean_time = mean(time))
+summary
+t.test(data$time[data$attractiveness=="hot"] ~
+data$approach[data$attractiveness=="hot"], var.equal = T)
+t.test(data$time[data$attractiveness=="ugly"] ~
+data$approach[data$attractiveness=="ugly"], var.equal = T)
+data = read.csv("student_data.csv")

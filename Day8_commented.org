@@ -1,0 +1,173 @@
+#+TITLE: Day 8 - Commented History from Class
+#+AUTHOR: Cari Bogulski, Jason Gullifer
+#+EMAIL: cari.bogulski@gmail.com, jason.gullifer@gmail.com
+#+PROPERTY: results output
+#+PROPERTY: session *R*
+#+PROPERTY: exports both
+#+STYLE: <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_org.css" />
+
+
+* Final script from today
+Note: you will need the solution for Homework 4 (Simon Script) in
+order to fully run this ggplot script.
+
+[[./Script Files/ggplot-day8.R][Download R script here]]
+
+#+begin_src R
+#File I need in working directory to run
+#"Cari Simon Data.csv"
+#"hot_or_not_prepped.csv"
+#
+#install.packages("ggplot2")
+library(ggplot2)
+library(plyr)
+
+# Plotting the Hot or Not dataset  ----------------------------------------
+#Read in our prepped dataset
+data<-read.csv("hot_or_not_prepped.csv")
+
+
+#Plot geom density; hint need to supply x
+
+#Might want to ply the data to get means per condition
+data.summarized <- ddply(data,.(attractiveness, approach),
+                         summarise,
+                         meanTime = mean(time))
+
+#Set up the core ggplot command
+sumplot <- ggplot(data.summarized, aes(x = attractiveness, #your x-axis variable (on the bottom)
+                                       y = meanTime, #your y-axis variable (left side)
+                                       fill = approach)) #other delineations... here fill color
+
+#Plot bars
+sumplot + geom_bar() #take out sumplot layer, and add to it a bar geometry
+
+#but we might want the bars not stacked, so we can dodge them
+sumplot + geom_bar(position = "dodge") #put bars side-by-side
+
+#could also use several other types of geoms, though perhaps bar is most useful.
+#we might want to do points, in this case we use group and color instead of 
+#fill. can add a line with geom_line(). so we change our base plot command.
+sumplot <- ggplot(data.summarized, aes(x = attractiveness,
+                                       y = meanTime,
+                                       group = approach)) #similar to before, but here we group by approach
+
+sumplot + geom_point(position = "dodge")
+
+#alright, but hard to read. can't tell the approach. let's add some color to 
+#differentiate
+sumplot <- ggplot(data.summarized, aes(x = attractiveness,
+                                       y = meanTime,
+                                       group = approach,
+                                       color = approach))#add in color by approach
+sumplot + geom_point(position = "dodge")
+
+#still a bit hard to read, let's add lines connecting the types of approach
+sumplot + geom_point(position = "dodge") + geom_line() #add line geometry to connect our "groups"
+
+#Great we can again see that for ugly people, approach matters, and less so for 
+#hot people
+
+#We actually don't even need to ply the data. ggplot includes
+#stat_summary(). Try with the bar. remember to switch to fill.
+myplot <- ggplot(data, aes(x = attractiveness,
+                                       y = time,
+                                       fill = approach))
+
+myplot + stat_summary(fun.y = mean, #apply the function mean to our y... ggplot knows to consider our groups and x variables
+                      geom="bar",   #supply the bar geom here
+                      position="dodge") #also specify the position 
+
+#Try points again, now with group and color  again. Need to specify separate 
+#summaries for each one
+
+myplot <- ggplot(data, aes(x = attractiveness,
+                                       y = time,
+                                       group = approach,
+                                       color = approach))
+
+myplot + stat_summary(fun.y = mean, geom = "line") +  #need to specify two stat_summaries, one for each geom
+  stat_summary(fun.y = mean, geom = "point") 
+
+
+myplot <- ggplot(data, aes(x = attractiveness,
+                                      y = time,
+                                      group = approach,
+                                      color = approach))
+
+#We could add some confidence intervals
+myplot + stat_summary(fun.y = mean, geom = "line") +  #need to specify two stat_summaries, one for each geom
+  stat_summary(fun.y = mean, geom = "point") + stat_summary(fun.data = mean_cl_boot, geom = "pointrange")
+
+
+# Plotting Cari's Simon Data ----------------------------------------------
+
+#Clear our workspace
+rm(list=ls())
+
+#Load the simon Data
+data <- read.csv("Cari Simon Data.csv")
+
+#Run the homework 4 solution script. Note, I removed install.packages()
+#commands. I also actually removed subject 1988.
+
+source("Homework_Set_4_solved.R")
+
+# We could look at our original dataset for the densityplot of RTs to see if our
+# cutoffs (250 and 3000 were correct). We might actually want to use a high
+# cutoff of like 1500.
+ggplot(data_unfiltered, aes(x=Stimulus.RT)) + geom_density()
+
+#Now we have all the simon data in our workspace. Let's now get only correct
+#trials for plotting
+data.correct<-data[data$Stimulus.ACC=="correct",]
+#table(data.correct$Stimulus.ACC) #could check that it works
+
+#plot some boxplots of raw data
+simonplot <- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency))
+simonplot + geom_boxplot()
+
+#Remember that we have multiple groups in our dataset, let's plot by group
+simonplot <- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot()
+
+#Could break it down by subject to get a sense of each individual's data
+simonplot <- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot() + facet_wrap(~Subject)
+
+#That was a little confusing for me. Maybe we can have our X be group and color
+#be congruency
+simonplot <- ggplot(data.correct, aes(y=Stimulus.RT, colour=Congruency,x=Group))
+simonplot + geom_boxplot()
+
+#We might further split things up to have different panes, or facets for each group
+simonplot <- ggplot(data.correct, aes(y=Stimulus.RT, x=Congruency,colour=Group))
+simonplot + geom_boxplot() + facet_wrap(~Group)
+
+#Could also plot density plots by group and by congruency
+simonplot <- ggplot(data.correct, aes(x=Stimulus.RT, fill = Group, colour=Group))
+simonplot + geom_density(alpha=.5) + facet_wrap(~Congruency)
+
+
+#Plotting raw data is fun, especially if you have numeric dependent variables 
+#because you can really start to visualize trends. However, here plot the 
+#summarized data. Remember that we could do this by hand with ddply and the
+#plot, or we could use stat summary.
+
+#Let's plot the dot and line chart like we did with hot or not (points are
+#usually preferred for representing RT data where bars are good for representing
+#count data)
+simonplot <-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line")
+
+#Add some confidence intervals
+simonplot <-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line") +
+  stat_summary(fun.data=mean_cl_normal,geom="pointrange")
+
+#Could wrap the plots instead
+simonplot <-ggplot(data.correct, aes(y=Stimulus.RT, x = Congruency, colour = Group, group=Group))
+simonplot + stat_summary(fun.y=mean, geom="point") +stat_summary(fun.y=mean, geom="line") +
+  stat_summary(fun.data=mean_cl_normal,geom="pointrange") + facet_wrap(~Group)
+
+#+end_src
